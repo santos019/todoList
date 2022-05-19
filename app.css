@@ -1,0 +1,82 @@
+html {
+    box-sizing: border-box;
+    background-color: rgb(117, 116, 19);
+}
+body {
+    margin: 0;
+}
+.headContainer{
+    width: 100%;
+    height: 200px;
+    background-color: brown;
+    position: relative;
+    float: left;
+
+}
+#headCanvas{
+
+
+}
+.headTitle{
+    width: 20%;
+    height: 100px;
+    background-color: blueviolet;
+    text-align: center;
+    position: absolute;
+    margin-left: 40%;
+    margin-top: -7%;
+    line-height: 40px;
+    font-size: 70px;
+    font-weight: 1000;
+}
+.bodyContainer{
+    width: 100%;
+    height: 600px;
+    background-color: aqua;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+.todayNote{
+    width: 70%;
+    height: 100px;
+    background-color: antiquewhite;
+}
+.addListContainer{
+    width: 70%;
+    height: 100px;
+    background-color: blue;
+}
+.listContainer{
+    width: 70%;
+    height: 500px;
+    background-color: brown;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.ListOption{
+    width: 70%;
+    height: 100px;
+    background-color: blueviolet;
+}
+.allCheck{
+    width: 10%;
+    height: 100%;
+    background-color: antiquewhite;
+    float: left;
+}
+.seeAllList{
+    width: 10%;
+    height: 100%;
+    background-color: blue;
+    float: right;
+}
+.myList{
+    width: 90%;
+    height: 200px;
+    background-color: rgb(230, 130, 0);
+    
+
+}
