@@ -8,23 +8,47 @@
 </head>
 <body>
     <div class="headContainer">
-        <canvas id = "headCanvas" width="1900" height="200">
-        </canvas> <div class="headTitle">todo List</div>
+        <div class = "headCanvas"></div> 
+        <div class="headTitle">todo List</div>
     </div>
     <div class="bodyContainer">
         <!-- 오늘의 달성률 -->
-        <div class="todayNote"></div>
+        <div class="todayNoteContainer">
+            <div class="todayNote">오늘의 달성률</div>
+            <div class="todayChart">chart</div>
+        </div>
         <!-- 검색창 -->
-        <div class="addListContainer"></div>
+        <div class="addListContainer">
+            <input class="addTitle" id="addTitleId" type="text"/>
+            <div class="addBtn" id = "addBtnId">+</div>
+        </div>
         <div class="listContainer">
             <div class="ListOption">
-            <div class="allCheck"></div>
-            <div class="seeAllList"></div>
+                <div class="allCheck">
+                    <input id="allCheckInputId" class="allCheckInput" type="checkbox">
+                    <label class="allCheckLabel" for="allCheckInputId">전체 선택</label>
+                </div>
+                <div class="seeSelectDate">
+                    <input id="seeSelectDataInputId" class="seeSelectDateInput" type="date">
+                </div>
+                <div class="seeAllList">
+                    <input id="seeAllListInputId" class="seeAllListInput" type="checkbox">
+                    <label class="seeAllListLabel" for="seeAllListInputId">전체 보기</label>
+                </div>
+            </div>
+            <ul class="myList" id="myListId"></ul>
+            <div class="clearContainer">
+                <div class="checkedClear">
+                    Clear
+                </div>
+                <div class="AllClear">
+                    All Clear
+                </div>
+            </div>
         </div>
-            <ul class="myList"></ul>
-        </div>
-        
-        </ul>
+    </div>
+    <div class="footerContainer">
+    footer
     </div>
     
 </body>

@@ -13,9 +13,21 @@ body {
     float: left;
 
 }
-#headCanvas{
+.headCanvas{
 
-
+    animation: move 5s linear infinite;
+    background-image: url("./Img/backImg.png") ;
+    background-color: aliceblue;
+    width: 100%;
+    height: 100%;
+}
+@keyframes move {
+    from{
+        background-position-x: 1920px;
+    }
+    to {
+        background-position-x: 0;
+    }
 }
 .headTitle{
     width: 20%;
@@ -38,15 +50,46 @@ body {
     align-items: center;
     
 }
-.todayNote{
+.todayNoteContainer{
     width: 70%;
     height: 100px;
     background-color: antiquewhite;
+}
+.todayNote{
+    width: 20%;
+    height: 100%;
+    background-color: burlywood;
+    font-size: 35px;
+    font-weight: 900;
+    text-align: center;
+    margin-left: 10%;
+    float: left;
+}
+.todayChart{
+    width: 60%;
+    height: 100%;
+    background-color: rgb(0, 225, 255);
+    float: left;
 }
 .addListContainer{
     width: 70%;
     height: 100px;
     background-color: blue;
+}
+.addTitle{
+    width: 70%;
+    height: 90%;
+    float: left;
+    margin-left: 10%;
+}
+.addBtn{
+    width: 9.4%;
+    height: 100%;
+    float: left;
+    background-color: rgb(80, 123, 160);
+    text-align: center;
+    font-size: 30px;
+    cursor: pointer;
 }
 .listContainer{
     width: 70%;
@@ -57,7 +100,7 @@ body {
     align-items: center;
 }
 .ListOption{
-    width: 70%;
+    width: 93%;
     height: 100px;
     background-color: blueviolet;
 }
@@ -67,16 +110,106 @@ body {
     background-color: antiquewhite;
     float: left;
 }
+.allCheckLabel{
+    width: 100%;
+    height: 10px;
+    background-color: aqua;
+}
 .seeAllList{
     width: 10%;
     height: 100%;
     background-color: blue;
     float: right;
 }
+.seeSelectDate{
+    width: 10%;
+    height: 100%;
+    background-color: antiquewhite;
+    float: right;
+}
 .myList{
     width: 90%;
-    height: 200px;
+    height: 500px;
     background-color: rgb(230, 130, 0);
-    
+    list-style: none;
+    padding: 0;
+}
+.clearContainer{
+    width: 100%;
+    height: 100px;
+    background-color: antiquewhite;
+    display: flex;
+}
+.checkedClear{
+    width: 50%;
+    height: 100%;
+    background-color: rgb(51, 255, 0);
+    text-align: center;
+    font-size: 40px;
+    font-weight: 900;
+}
+.AllClear{
+    width: 50%;
+    height: 100%;
+    background-color: rgb(77, 172, 53);
+    text-align: center;
+    font-size: 40px;
+    font-weight: 900;
+}
+.footerContainer{
+    width: 100%;
+    height: 100px;
+    background-color: blueviolet;
+}
+.newList{
 
+    float: left;
+    width: 100%;
+    height: 30px;
+    background-color: antiquewhite;
+    position: relative;
+
+}
+.listInputLabel{
+    float: left;
+    width: 30px;
+    height: 100%;
+    background-size: 30px;
+    background-image:url("./Icon/icons8-unchecked-checkbox-100.png");
+    background-color: rgb(255, 255, 255);
+    cursor: pointer;
+}
+.listInputLabelTrue{
+    background-image:url("./Icon/icons8-tick-box-100.png");
+
+}
+
+.listInput{
+    display: none;
+}
+.listTitleDiv{
+    width: 70%;
+    height: 100%;
+    background-color: aqua;
+    float: left;
+    margin-left: 3px;
+}
+.listDateDiv{
+    width: 15%;
+    float: left;
+    font-size: 11px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(76, 0, 255);
+}
+.listRemoveDiv{
+    float: left;
+    background-size: 30px; 
+    background-color: blueviolet;
+    width:30px; 
+    height:30px;
+    margin-left: 25px;
+    background-image:url("./Icon/free-icon-font-trash-3917378.png");
 }
