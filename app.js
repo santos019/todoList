@@ -74,6 +74,9 @@ function FindData () {
     this.updateCountNumber = () => {
         countNumber = countNumber + 1
     }
+    this.initCountNumber = () => {
+        countNumber = 0
+    }
 }
 
 function GetNode () {
@@ -110,10 +113,12 @@ const paint = new Paint() // 리스트를 갱신하는 인스턴스
 function start () {
     getData.initDate()
     const arr = getData.getData().loadingArr
+    getData.initCountNumber()
     arr.forEach(element => {
-        console.log(element)
         paint.setState(element)
+        element.nodeId = getData.getData().countNumber - 1
     })
+    localStorage.setItem('list', JSON.stringify(arr))
 }
 start()
 
