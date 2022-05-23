@@ -1,3 +1,5 @@
+// 렌더링은 setState와 render방식으로 구현하기~
+
 function Paint (initialState) {
     this.state = initialState
     this.$target = document.getElementById('myListId')
@@ -34,9 +36,6 @@ function Paint (initialState) {
         listRemoveDiv.className = 'listRemoveDiv'
         listRemoveDiv.id = 'listRemoveDiv' + countNumber
         getData.updateCountNumber()
-        if (state.check === true) {
-            listInputLabel.classList.add('listInputLabelTrue')
-        }
         this.$target.appendChild(newList)
         listTitleDiv.appendChild(insertTitle)
         listInputLabel.appendChild(listInput)
@@ -45,17 +44,18 @@ function Paint (initialState) {
         newList.appendChild(listDateDiv)
         newList.appendChild(listRemoveDiv)
         listDateDiv.appendChild(inserDate)
+        if (state.nodeCheck === true) {
+            changeCheckEvnt(listInputLabel)
+        }
     }
 }
 
 function FindData () {
-    let output
-    let loadingArr
+    let output = localStorage.getItem('list')
+    let loadingArr = JSON.parse(output) || []
     let countNumber // 이벤트를 할 때 마다 갱신하기
 
     this.getData = () => { // countNumber를 이렇게 한 이유 : 새롭게 리스트를 추가했을 때 nodeId가 겹칠 수 있기 때문에 겹칠 일 없이 nodeId 최대
-        output = localStorage.getItem('list')
-        loadingArr = JSON.parse(output) || []
         return { output, loadingArr, countNumber }
     }
     this.setData = ({ nodeId, nodeTitle, nodeContext, nodeCheck, nodeDate }) => {
@@ -65,7 +65,7 @@ function FindData () {
     this.initDate = () => {
         output = localStorage.getItem('list')
         loadingArr = JSON.parse(output) || []
-        countNumber = loadingArr.length === 0 ? 0 : loadingArr[loadingArr.length - 1].nodeId + 1
+        countNumber = 0 // loadingArr.length === 0 ? 0 : loadingArr[loadingArr.length - 1].nodeId + 1
     }
     this.setArr = (arr) => {
         loadingArr = arr
@@ -74,15 +74,18 @@ function FindData () {
     this.updateCountNumber = () => {
         countNumber = countNumber + 1
     }
-    this.initCountNumber = () => {
-        countNumber = 0
-    }
+    // this.initCountNumber = () => {
+    //     countNumber = 0
+    // }
 }
 
 function GetNode () {
     const addListBtn = document.getElementById('addBtnId')
     const addTitle = document.getElementById('addTitleId')
     const totalList = document.getElementById('myListId')
+    const allClickBtn = document.getElementById('allCheckInputId')
+    const clearBtn = document.getElementById('checkedClearId')
+    const clearAllBtn = document.getElementById('AllClearId')
     this.getAddListBtn = () => {
         return addListBtn
     }
@@ -92,65 +95,207 @@ function GetNode () {
     this.getTotalList = () => {
         return totalList
     }
+    this.getAllClickBtn = () => {
+        return allClickBtn
+    }
+    this.getClearBtn = () => {
+        return clearBtn
+    }
+    this.getClearAllBtn = () => {
+        return clearAllBtn
+    }
 }
-
-// function FindData2 () {
-//     this.output = 0
-//     this.loadingArr = 1
-
-//     this.getData = () => {
-//         this.output = 2
-//         this.loadingArr = 3
-//         const output = this.output
-//         const loadingArr = this.loadingArr
-//         return { output, loadingArr }
-//     }
-// }
+const clearChecked = new ClearChecked()
+const allClickEvnt = new AllClickEvnt()
+const allCheckVerify = new AllCheckVerify()
 const getData = new FindData() // localStorage와 countNumber를 얻고, 갱신하는 인스턴스
 const getNode = new GetNode() // node를 찾는 인스턴스
 const paint = new Paint() // 리스트를 갱신하는 인스턴스
-
-function start () {
-    getData.initDate()
+const checkEvnt = new LabelEvnt()
+const clearAll = new ClearAll()
+const modalEvnt = new ModalEvnt()
+const writeEvnt = new WriteEvnt()
+function start () { // 새로고침이나 페이지에 처음 들어갈 때 렌더링하는 함수
+    getData.initDate() // 초기화
     const arr = getData.getData().loadingArr
-    getData.initCountNumber()
     arr.forEach(element => {
         paint.setState(element)
         element.nodeId = getData.getData().countNumber - 1
     })
-    localStorage.setItem('list', JSON.stringify(arr))
+    getData.setArr(arr)
+    beforCheck()
 }
 start()
+getNode.getClearBtn().addEventListener('click', () => clearChecked.setState())
+getNode.getAllClickBtn().addEventListener('change', (e) => allClickEvnt.setState(e))
+getNode.getClearAllBtn().addEventListener('click', () => clearAll.setState())
+function AllClickEvnt (e) {
+    this.state = null
+    this.setState = (e) => {
+        this.state = e.srcElement.checked
+        allCheckVerify.setState(this.state)
+        this.render(e.srcElement.checked)
+    }
+    this.render = (tmp) => {
+        const arr = getData.getData().loadingArr
+        const allNodes = document.querySelectorAll('.listInputLabel')
+        arr.forEach(element => { element.nodeCheck = tmp })
+        if (tmp) {
+            allNodes.forEach(element => {
+                element.nextSibling.classList.add('listTitleDivTrue')
+                element.classList.add('listInputLabelTrue')
+            })
+        } else {
+            allNodes.forEach(element => {
+                element.nextSibling.classList.remove('listTitleDivTrue')
+                element.classList.remove('listInputLabelTrue')
+            })
+        }
+        getData.setArr(arr)
+    }
+}
+function AllCheckVerify () {
+    this.state = null
+    this.$target = document.getElementById('allCheckInputId')
+    this.$labelTarget = document.getElementById('allCheckLabelId')
+    this.setState = (e) => {
+        this.state = e
+        this.$target.checked = e
+        this.render(e)
+    }
+    this.render = (e) => {
+        this.$labelTarget.textContent = (e === true ? '전체 해제' : '전체 선택')
+    }
+}
 
-console.log(getNode.getAddListBtn())
 getNode.getAddListBtn().addEventListener('click', clickAddBtn)
 function clickAddBtn () { // state = {title, date(today), check(false)}
     const makeDate = new Date()
     const todayDate = makeDate.toISOString().substr(0, 10)
-    console.log(todayDate)
     paint.setState({ nodeTitle: getNode.getAddTitle().value, nodeDate: todayDate, nodeCheck: false })
     getData.setData({ nodeId: getData.getData().countNumber - 1, nodeTitle: getNode.getAddTitle().value, nodeContext: '', nodeCheck: false, nodeDate: todayDate })
+    getNode.getAddTitle().value = ''
+    allCheckVerify.setState(false)
 }
 getNode.getTotalList().addEventListener('click', totalEvnt)
-function totalEvnt () {
+function totalEvnt (event) {
     if (event.target.classList.contains('listInputLabel')) {
-        labelEvnt(event.target)
+        checkEvnt.setState(event.target)
     } else if (event.target.className === 'listRemoveDiv') {
         oneRemoveEvnt(event.target)
+    } else if (event.target.className === 'listTitleDiv') {
+        modalEvnt.setState(event.target)
+        console.log('??')
+    } else if (event.target.className === 'modalDiv') {
+
     }
 }
 
-function labelEvnt (e) {
-    e.classList.toggle('listInputLabelTrue')
+function ModalEvnt () {
+    this.setState = (e) => {
+        const modalNode = document.getElementById('modalId' + e.id.substr(0, 13))
+        if (modalNode === null) {
+            const modal = document.createElement('div')
+            modal.className = 'modalDiv'
+            modal.id = 'modalId' + e.id.substr(0, 13)
+            e.parentNode.insertAdjacentElement('afterend', modal)
+            modal.addEventListener('click', (e) => writeEvnt.setState(e))
+        } else {
+            modalNode.parentNode.removeChild(modalNode)
+        }
+    }
 }
-function oneRemoveEvnt (e) {
-    e.classList.toggle('listInputLabelTrue')
-    let newArr = getData.getData().loadingArr
-    e.parentNode.remove()
-    console.log(newArr)
-    console.log(Number(e.id.substr(13)))
-    newArr = newArr.filter((el) => Number(el.nodeId) !== Number(e.id.substr(13)))
-    console.log(newArr)
-    getData.setArr(newArr)
+function WriteEvnt () {
+    const insertWrite = document.createElement('textarea')
+    insertWrite.className = 'insertWriteDiv'
+    insertWrite.id = 'insertWriteId'
+    this.setState = (e) => {
+        console.log(e.target)
+        const $target = document.getElementById('insertWriteId')
+        if ($target !== null) // textarea가 활성화 되어 있음
+        {
+            window.addEventListener('click', (e) => {ReadEvnt.setState()})
+        }
+//        e.target.removeEventListener('click', (e) => writeEvnt.setState(e))
+        e.target.appendChild(insertWrite)
+    }
+}
+function ReadEvnt () {
+    this.setState = () => {
+        // 값을 저장하고, 윈도우로 니가는 이벤트
+    }
 }
 
+function LabelEvnt () { // setState
+    this.state = null
+    this.setState = (e) => {
+        this.state = e
+        this.render(this.state)
+    }
+
+    this.render = (state) => {
+        const arr = getData.getData().loadingArr
+        const findNumber = state.id.substr(14)
+        const index = arr.findIndex(e => Number(e.nodeId) === Number(findNumber))
+        arr[index].nodeCheck = !(arr[index].nodeCheck)
+        changeCheckEvnt(state)
+        getData.setArr(arr)
+        beforCheck()
+    }
+}
+
+function changeCheckEvnt (e) {
+    e.nextSibling.classList.toggle('listTitleDivTrue')
+    e.classList.toggle('listInputLabelTrue')
+}
+
+function oneRemoveEvnt (e) {
+    let newArr = getData.getData().loadingArr
+    e.parentNode.remove()
+    newArr = newArr.filter((el) => Number(el.nodeId) !== Number(e.id.substr(13)))
+    getData.setArr(newArr)
+    beforCheck()
+}
+
+function beforCheck () {
+    const arr = getData.getData().loadingArr
+    if (arr.length === 0) allCheckVerify.setState(false)
+    for (const i in arr) {
+        if (arr[i].nodeCheck === false) {
+            allCheckVerify.setState(false)
+            return
+        } else if (Number(i) === (arr.length - 1)) {
+            allCheckVerify.setState(true)
+        }
+    }
+}
+function ClearChecked () {
+    this.$target = document.getElementById('checkedClearId')
+
+    this.setState = () => {
+        this.render()
+    }
+    this.render = () => {
+        // const checkedNodes = document.querySelectorAll('.newList')
+        let arr = getData.getData().loadingArr
+        arr = arr.filter(detailCheck)
+        getData.setArr(arr)
+    }
+}
+
+function ClearAll () {
+    this.$target = document.getElementById('myListId')
+    this.setState = () => {
+        while (this.$target.hasChildNodes()) {
+            this.$target.removeChild(this.$target.firstChild)
+        }
+        getData.setArr([])
+    }
+}
+function detailCheck (e) {
+    if (e.nodeCheck) {
+        const removeLi = document.getElementById('newList' + e.nodeId)
+        getNode.getTotalList().removeChild(removeLi)
+        return false
+    } else return true
+}

@@ -43,7 +43,7 @@ body {
 }
 .bodyContainer{
     width: 100%;
-    height: 600px;
+    height: auto;
     background-color: aqua;
     display: flex;
     flex-direction: column;
@@ -73,7 +73,7 @@ body {
 }
 .addListContainer{
     width: 70%;
-    height: 100px;
+    height: 50px;
     background-color: blue;
 }
 .addTitle{
@@ -93,7 +93,7 @@ body {
 }
 .listContainer{
     width: 70%;
-    height: 500px;
+    height: auto;
     background-color: brown;
     display: flex;
     flex-direction: column;
@@ -101,7 +101,7 @@ body {
 }
 .ListOption{
     width: 93%;
-    height: 100px;
+    height: 50px;
     background-color: blueviolet;
 }
 .allCheck{
@@ -129,7 +129,7 @@ body {
 }
 .myList{
     width: 90%;
-    height: 500px;
+    height: auto;
     background-color: rgb(230, 130, 0);
     list-style: none;
     padding: 0;
@@ -212,4 +212,10 @@ body {
     height:30px;
     margin-left: 25px;
     background-image:url("./Icon/free-icon-font-trash-3917378.png");
+}
+.listTitleDivTrue {
+    text-decoration: line-through;
+}
+.modalDiv{
+    height: 100px;
 }
