@@ -219,3 +219,16 @@ body {
 .modalDiv{
     height: 100px;
 }
+.insertWriteDiv{
+    float: left;
+    display: block;
+}
+.modalContextDiv{
+    width: 80%;
+    height: 50px;
+    float: left;
+    background-color: blanchedalmond;
+}
+.textblock{
+    display: block;
+}

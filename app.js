@@ -115,6 +115,7 @@ const checkEvnt = new LabelEvnt()
 const clearAll = new ClearAll()
 const modalEvnt = new ModalEvnt()
 const writeEvnt = new WriteEvnt()
+// const readEvnt = new ReadEvnt()
 function start () { // 새로고침이나 페이지에 처음 들어갈 때 렌더링하는 함수
     getData.initDate() // 초기화
     const arr = getData.getData().loadingArr
@@ -185,47 +186,84 @@ function totalEvnt (event) {
         oneRemoveEvnt(event.target)
     } else if (event.target.className === 'listTitleDiv') {
         modalEvnt.setState(event.target)
-        console.log('??')
-    } else if (event.target.className === 'modalDiv') {
-
     }
 }
 
 function ModalEvnt () {
     this.setState = (e) => {
-        const modalNode = document.getElementById('modalId' + e.id.substr(0, 13))
+        const modalNode = document.getElementById('modalId' + e.id.substr(12))
         if (modalNode === null) {
+            const arr = getData.getData().loadingArr
+            const findArr = arr.find(el => Number(el.nodeId) === Number(e.id.substr(12)))
             const modal = document.createElement('div')
+            const modalContext = document.createElement('div')
+            modalContext.textContent = findArr.nodeContext
+            modalContext.className = 'modalContextDiv'
+            modalContext.id = 'modalContextId' + e.id.substr(12)
             modal.className = 'modalDiv'
-            modal.id = 'modalId' + e.id.substr(0, 13)
+            modal.id = 'modalId' + e.id.substr(12)
+            modal.appendChild(modalContext)
             e.parentNode.insertAdjacentElement('afterend', modal)
-            modal.addEventListener('click', (e) => writeEvnt.setState(e))
+            modal.addEventListener('click', writeEvnt.setState)
         } else {
             modalNode.parentNode.removeChild(modalNode)
+            // window.removeEventListener('click', readEvnt.setState)
         }
     }
 }
-function WriteEvnt () {
-    const insertWrite = document.createElement('textarea')
-    insertWrite.className = 'insertWriteDiv'
-    insertWrite.id = 'insertWriteId'
-    this.setState = (e) => {
-        console.log(e.target)
-        const $target = document.getElementById('insertWriteId')
-        if ($target !== null) // textarea가 활성화 되어 있음
-        {
-            window.addEventListener('click', (e) => {ReadEvnt.setState()})
+function WriteEvnt (e) {
+    this.setState = (e, modal) => {
+        const tmp = document.getElementById('insertWriteId')
+        // const parent = e.target.className === 'modalContextDiv' ? e.target : e.target.firstChild
+        console.log(e)
+        if (!tmp) {
+            console.log('test')
+            const insertWrite = document.createElement('textarea')
+            insertWrite.className = 'insertWriteDiv'
+            const parent = e.target.className === 'modalDiv' ? e.target : e.target.parentNode
+            console.log(parent)
+            insertWrite.id = 'insertWriteId'
+            const arr = getData.getData().loadingArr
+            const findArr = arr.find(e => Number(e.nodeId) === Number(parent.id.substr(14)))
+            insertWrite.value = findArr.nodeContext
+            const test = document.getElementById('modalId0')
+            test.insertBefore(insertWrite, null)
+            console.log(insertWrite)
+        } else {
+            console.log(e.target)
+            if (e.target.className !== 'insertWriteDiv') {
+                const textDiv = document.getElementById('insertWriteId')
+                const arr = getData.getData().loadingArr
+                const modalIndex = textDiv.parentNode.className === 'modalContextDiv' ? textDiv.parentNode.id.substr(14) : textDiv.parentNode.id.substr(7)
+                const findArr = arr.find(e => Number(e.nodeId) === Number(modalIndex))
+                findArr.nodeContext = textDiv.value
+                textDiv.parentNode.removeChild(textDiv)
+                getData.setArr(arr)
+            }
         }
-//        e.target.removeEventListener('click', (e) => writeEvnt.setState(e))
-        e.target.appendChild(insertWrite)
-    }
-}
-function ReadEvnt () {
-    this.setState = () => {
-        // 값을 저장하고, 윈도우로 니가는 이벤트
     }
 }
 
+// function ReadEvnt () {
+//     this.setState = (e) => {
+//         const textDiv = document.getElementById('insertWriteId')
+//         // 값을 저장하고, 윈도우로 니가는 이벤트
+//         console.log('aaa')
+//         if (e.target.className !== 'insertWriteDiv' && e.target.className !== 'modalDiv' && textDiv) {
+//             // textDiv.previousSibling.style = 'display: block'
+//             const arr = getData.getData().loadingArr
+//             console.log('ttt')
+//             const modalIndex = textDiv.parentNode.className === 'modalContextDiv' ? textDiv.parentNode.id.substr(14) : textDiv.parentNode.id.substr(7)
+//             const findArr = arr.find(e => Number(e.nodeId) === Number(modalIndex))
+//             findArr.nodeContext = textDiv.value
+//             getData.setArr(arr)
+//             textDiv.parentNode.addEventListener('click', writeEvnt.setState)
+//             // textDiv.classList.add('textblock')
+//             // textDiv.parentNode.removeChild(textDiv)
+//             window.removeEventListener('click', readEvnt.setState)
+//         }
+//     }
+// }
 function LabelEvnt () { // setState
     this.state = null
     this.setState = (e) => {
