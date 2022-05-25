@@ -203,6 +203,7 @@ body {
     justify-content: center;
     align-items: center;
     background-color: rgb(76, 0, 255);
+    cursor: pointer;
 }
 .listRemoveDiv{
     float: left;
@@ -217,10 +218,11 @@ body {
     text-decoration: line-through;
 }
 .modalDiv{
-    height: 100px;
+    height: 120px;
+    background-color: blueviolet;
 }
 .modalContextDiv{
-    width: 80%;
+    width: 100%;
     height: 50px;
     float: left;
     display: none;

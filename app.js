@@ -116,6 +116,7 @@ const clearAll = new ClearAll()
 const modalEvnt = new ModalEvnt()
 const writeEvnt = new WriteEvnt()
 const readEvnt = new ReadEvnt()
+const dataEvnt = new DataEvnt()
 function start () { // 새로고침이나 페이지에 처음 들어갈 때 렌더링하는 함수
     getData.initDate() // 초기화
     const arr = getData.getData().loadingArr
@@ -186,9 +187,18 @@ function totalEvnt (event) {
         oneRemoveEvnt(event.target)
     } else if (event.target.className === 'listTitleDiv') {
         modalEvnt.setState(event.target)
+    } else if (event.target.className === 'listDateDiv') {
+        dataEvnt.setState(event.target)
     }
 }
-
+function DataEvnt () {
+    this.setState = (e) => {
+        const dataSelect = document.createElement('input')
+        dataSelect.type = 'date'
+        e.appendChild(dataSelect)
+        console.log(dataSelect.value)
+    }
+}
 function ModalEvnt () {
     const id = 0
     this.getId = () => {
