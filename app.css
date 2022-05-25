@@ -219,15 +219,23 @@ body {
 .modalDiv{
     height: 100px;
 }
-.insertWriteDiv{
-    float: left;
-    display: block;
-}
 .modalContextDiv{
     width: 80%;
     height: 50px;
     float: left;
+    display: none;
     background-color: blanchedalmond;
+}
+.modalContextDivOpen{
+
+    display: block;
+}
+.insertWriteDiv{
+    float: left;
+    display: none;
+}
+.insertWriteDivOpen{
+    display: block;
 }
 .textblock{
     display: block;
