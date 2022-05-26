@@ -89,10 +89,17 @@ body {
     width: 9.4%;
     height: 100%;
     float: left;
-    background-color: rgb(80, 123, 160);
+    background: rgb(8, 33, 116);
+    background: linear-gradient( to bottom, rgb(28, 62, 131), rgba(5, 19, 82, 0.705));
     text-align: center;
     font-size: 30px;
     cursor: pointer;
+    border-radius:0% 18% 18% 0%;
+}
+.addBtn:hover {
+    background: rgb(136, 156, 221);
+    background: linear-gradient( to bottom, rgb(33, 69, 139), rgba(50, 81, 216, 0.705));
+    transition-duration: 3s;
 }
 .listContainer{
     width: 70%;
@@ -124,6 +131,7 @@ body {
     text-align: right;
     line-height: 1.8;
     background-image:url("./Icon/icons8-unchecked-checkbox-100.png");
+    cursor: pointer;
 }
 .allCheckInput{
     display: none;
@@ -136,6 +144,9 @@ input[type=checkbox]:checked + label{
     height: 100%;
     float: right;
 }
+.seeSelectDateInput{
+    cursor: pointer;
+}
 .seeAllListLabel{
     width: 100px;
     height: 30px;
@@ -145,6 +156,7 @@ input[type=checkbox]:checked + label{
     text-align: right;
     line-height: 1.8;
     background-image:url("./Icon/icons8-unchecked-checkbox-100.png");
+    cursor: pointer;
 }
 .seeAllListInput{
     display: none;
@@ -160,6 +172,7 @@ input[type=checkbox]:checked + label{
     height: auto;
     list-style: none;
     padding: 0;
+    border: 1px solid gray;
 }
 .clearContainer{
     width: 100%;
@@ -168,20 +181,43 @@ input[type=checkbox]:checked + label{
     display: flex;
 }
 .checkedClear{
-    width: 50%;
-    height: 100%;
-    background-color: rgb(51, 255, 0);
+
+    flex-basis: 0%;
     text-align: center;
-    font-size: 40px;
-    font-weight: 900;
+    font-size: 35px;
+    cursor: pointer;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    font-weight: 700;
+    flex:auto;
+}
+.checkedClear:hover {
+    background: rgb(8, 33, 116);
+    background: linear-gradient( to bottom, rgb(28, 62, 131), rgba(5, 19, 82, 0.705));
+    color: whitesmoke;
+    transition-duration: 2s;
+    flex-grow: 3;
 }
 .AllClear{
-    width: 50%;
-    height: 100%;
-    background-color: rgb(77, 172, 53);
+    flex-basis: 0%;
     text-align: center;
-    font-size: 40px;
-    font-weight: 900;
+    font-size: 35px;
+    cursor: pointer;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    font-weight: 700;
+    flex:auto;
+  
+}
+.AllClear:hover{
+    background: rgb(8, 33, 116);
+    background: linear-gradient( to bottom, rgb(28, 62, 131), rgba(5, 19, 82, 0.705));
+    color: whitesmoke;
+    transition-duration: 2s;
+    flex-grow: 3;
+   
+    
+
 }
 .footerContainer{
     width: 100%;
@@ -208,6 +244,7 @@ input[type=checkbox]:checked + label{
 }
 .listInputLabel:hover{
     background-color: rgb(237, 236, 236);
+    
 }
 .listRemoveDiv:hover{
     background-color: rgb(237, 236, 236);
@@ -255,13 +292,18 @@ input[type=checkbox]:checked + label{
     height:30px;
     margin-left: 25px;
     background-image:url("./Icon/free-icon-font-trash-3917378.png");
+    cursor: pointer;
 }
 .listTitleDivTrue {
     text-decoration: line-through;
 }
 .modalDiv{
     height: 120px;
-    background-color: blueviolet;
+    width: 100%;
+    border-bottom: 1px solid gray;
+    border-right: 1px solid gray;
+    border-left: 1px solid gray;
+    float: left;
 }
 .modalContextDiv{
     width: 100%;
@@ -276,6 +318,8 @@ input[type=checkbox]:checked + label{
 }
 .insertWriteDiv{
     float: left;
+    width: 99%;
+    height: 96%;
     display: none;
 }
 .insertWriteDivOpen{
