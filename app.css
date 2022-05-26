@@ -328,3 +328,10 @@ input[type=checkbox]:checked + label{
 .textblock{
     display: block;
 }
+.modalGuageInput{
+    width: 80%;
+    margin-left: 10%;
+    height: 50px;
+    background-color: aqua;
+    float: left;
+}

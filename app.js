@@ -59,7 +59,7 @@ function FindData () {
         return { output, loadingArr, countNumber }
     }
     this.setData = ({ nodeId, nodeTitle, nodeContext, nodeCheck, nodeDate }) => {
-        loadingArr.push({ nodeId: Number(nodeId), nodeTitle: String(nodeTitle), nodeContext: String(nodeContext), nodeCheck: Boolean(nodeCheck), nodeDate: String(nodeDate) })
+        loadingArr.push({ nodeId: Number(nodeId), nodeTitle: String(nodeTitle), nodeContext: String(nodeContext), nodeCheck: Boolean(nodeCheck), nodeDate: String(nodeDate), nodeGauge: 0 })
         // localStorage.setItem('list', JSON.stringify(loadingArr))
     }
     this.initDate = () => {
@@ -143,6 +143,7 @@ const changeEvnt = new ChangeEvnt()
 const inputClose = new InputClose()
 const seeAllEvnt = new SeeAllEvnt()
 const seeDateEvnt = new SeeDateEvnt()
+const changeGuageEvnt = new ChangeGuageEvnt()
 function start () { // 새로고침이나 페이지에 처음 들어갈 때 렌더링하는 함수
     // getData.initDate() // 초기화
     // const arr = getData.getData().loadingArr
@@ -240,7 +241,7 @@ function clickAddBtn () { // state = {title, date(today), check(false)}
     const makeDate = new Date()
     const todayDate = makeDate.toISOString().substr(0, 10)
     // paint.setState({ nodeTitle: getNode.getAddTitle().value, nodeDate: todayDate, nodeCheck: false })
-    getData.setData({ nodeId: getData.getData().countNumber - 1, nodeTitle: getNode.getAddTitle().value, nodeContext: '', nodeCheck: false, nodeDate: todayDate })
+    getData.setData({ nodeId: getData.getData().countNumber, nodeTitle: getNode.getAddTitle().value, nodeContext: '', nodeCheck: false, nodeDate: todayDate, nodeGauge: 0 })
     getData.ssetArr()
     getNode.getAddTitle().value = ''
     allCheckVerify.setState(false)
@@ -322,11 +323,16 @@ function ModalEvnt () {
         if (modalNode === null) {
             const modal = document.createElement('div')
             const modalContext = document.createElement('div')
+            const modalGuage = document.createElement('input')
             modalContext.className = 'modalContextDiv'
             modalContext.id = 'modalContextId' + id
             modal.className = 'modalDiv'
             modal.id = 'modalId' + id
+            modalGuage.className = 'modalGuageInput'
+            modalGuage.id = 'modalGuageInputId' + id
+            modalGuage.type = 'range'
             const { findArr: appenArr } = findArrIndex(id)
+            modalGuage.value = appenArr.nodeGauge
             const insertWrite = document.createElement('textarea')
             insertWrite.className = 'insertWriteDiv'
             insertWrite.id = 'insertWriteId' + id
@@ -335,6 +341,8 @@ function ModalEvnt () {
             modalContext.classList.add('modalContextDivOpen')
             modal.appendChild(modalContext)
             modal.appendChild(insertWrite)
+            modal.appendChild(modalGuage)
+            modalGuage.addEventListener('change', changeGuageEvnt.setState)
             e.parentNode.insertAdjacentElement('afterend', modal)
             modal.addEventListener('click', writeEvnt.setState)
         } else if (e.parentNode.nextSibling.className === 'modalDiv') {
@@ -343,6 +351,15 @@ function ModalEvnt () {
             modalNode.removeChild(modalNode.firstChild)
             modalNode.parentNode.removeChild(modalNode)
         }
+    }
+}
+function ChangeGuageEvnt () {
+    this.setState = (e) => {
+        console.log(e.target.value)
+        const {findArr, arr} = findArrIndex(e.target.id.substr(17))
+        findArr.nodeGauge = e.target.value
+        getData.setArr(arr)
+        console.log(e.target.id.substr(17))
     }
 }
 function findArrIndex (id) {
