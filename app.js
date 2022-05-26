@@ -60,7 +60,7 @@ function FindData () {
     }
     this.setData = ({ nodeId, nodeTitle, nodeContext, nodeCheck, nodeDate }) => {
         loadingArr.push({ nodeId: Number(nodeId), nodeTitle: String(nodeTitle), nodeContext: String(nodeContext), nodeCheck: Boolean(nodeCheck), nodeDate: String(nodeDate) })
-        localStorage.setItem('list', JSON.stringify(loadingArr))
+        // localStorage.setItem('list', JSON.stringify(loadingArr))
     }
     this.initDate = () => {
         output = localStorage.getItem('list')
@@ -71,12 +71,26 @@ function FindData () {
         loadingArr = arr
         localStorage.setItem('list', JSON.stringify(loadingArr))
     }
+    this.ssetArr = (arr = loadingArr) => {
+        loadingArr = arr
+        countNumber = 0
+        getNode.getTotalList().textContent = ''
+        sortArr(loadingArr)
+        localStorage.setItem('list', JSON.stringify(loadingArr))
+        arr.forEach(element => {
+            paint.setState(element)
+            element.nodeId = getData.getData().countNumber - 1
+        })
+    }
+    this.setCollect = (arr) => {
+
+    }
     this.updateCountNumber = () => {
         countNumber = countNumber + 1
     }
-    // this.initCountNumber = () => {
-    //     countNumber = 0
-    // }
+    this.initCountNumber = () => {
+        countNumber = 0
+    }
 }
 
 function GetNode () {
@@ -86,6 +100,8 @@ function GetNode () {
     const allClickBtn = document.getElementById('allCheckInputId')
     const clearBtn = document.getElementById('checkedClearId')
     const clearAllBtn = document.getElementById('AllClearId')
+    const seeAllBtn = document.getElementById('seeAllListInputId')
+    const selectDate = document.getElementById('seeSelectDataInputId')
     this.getAddListBtn = () => {
         return addListBtn
     }
@@ -104,6 +120,12 @@ function GetNode () {
     this.getClearAllBtn = () => {
         return clearAllBtn
     }
+    this.getSeeAllBtn = () => {
+        return seeAllBtn
+    }
+    this.getSelectDate = () => {
+        return selectDate
+    }
 }
 const clearChecked = new ClearChecked()
 const allClickEvnt = new AllClickEvnt()
@@ -117,20 +139,63 @@ const modalEvnt = new ModalEvnt()
 const writeEvnt = new WriteEvnt()
 const readEvnt = new ReadEvnt()
 const dataEvnt = new DataEvnt()
+const changeEvnt = new ChangeEvnt()
+const inputClose = new InputClose()
+const seeAllEvnt = new SeeAllEvnt()
+const seeDateEvnt = new SeeDateEvnt()
 function start () { // 새로고침이나 페이지에 처음 들어갈 때 렌더링하는 함수
-    getData.initDate() // 초기화
-    const arr = getData.getData().loadingArr
-    arr.forEach(element => {
-        paint.setState(element)
-        element.nodeId = getData.getData().countNumber - 1
-    })
-    getData.setArr(arr)
+    // getData.initDate() // 초기화
+    // const arr = getData.getData().loadingArr
+    // arr.forEach(element => {
+    //     paint.setState(element)
+    //     element.nodeId = getData.getData().countNumber - 1
+    // })
+    getData.ssetArr()
     beforCheck()
 }
 start()
-getNode.getClearBtn().addEventListener('click', () => clearChecked.setState())
-getNode.getAllClickBtn().addEventListener('change', (e) => allClickEvnt.setState(e))
-getNode.getClearAllBtn().addEventListener('click', () => clearAll.setState())
+getNode.getClearBtn().addEventListener('click', clearChecked.setState)
+getNode.getAllClickBtn().addEventListener('change', allClickEvnt.setState)
+getNode.getClearAllBtn().addEventListener('click', clearAll.setState)
+getNode.getSeeAllBtn().addEventListener('click', seeAllEvnt.setState)
+getNode.getSelectDate().addEventListener('change', seeDateEvnt.setState)
+
+function SeeDateEvnt () {
+    const $target = getNode.getSelectDate()
+    this.setState = (e) => {
+        getNode.getSeeAllBtn().checked = false
+        let arr = getData.getData().loadingArr
+        const date = $target.value
+        arr = arr.filter(el => el.nodeDate === date)
+        console.log(arr)
+        getData.initDate() // 초기화
+        getNode.getTotalList().textContent = ''
+        arr.forEach(element => {
+            paint.setState(element)
+            element.nodeId = getData.getData().countNumber - 1
+        })
+    }
+}
+
+function SeeAllEvnt () {
+    const seeAllNode = getNode.getSeeAllBtn()
+    const selectDate = getNode.getSelectDate()
+    seeAllNode.checked = true
+    this.setState = (e) => { // 똑같이 그냥 ssetArr 호출하면됨
+        console.log(selectDate.value)
+        if (seeAllNode.checked === true) {
+            console.log(seeAllNode.checked)
+            selectDate.value = '----------'
+            getData.ssetArr()
+        } else if (selectDate.value === '') {
+            const today = new Date()
+            const todayDate = today.toISOString().substr(0, 10)
+            selectDate.value = todayDate
+            seeDateEvnt.setState()
+            console.log(todayDate)
+        }
+    }
+}
 function AllClickEvnt (e) {
     this.state = null
     this.setState = (e) => {
@@ -174,10 +239,13 @@ getNode.getAddListBtn().addEventListener('click', clickAddBtn)
 function clickAddBtn () { // state = {title, date(today), check(false)}
     const makeDate = new Date()
     const todayDate = makeDate.toISOString().substr(0, 10)
-    paint.setState({ nodeTitle: getNode.getAddTitle().value, nodeDate: todayDate, nodeCheck: false })
+    // paint.setState({ nodeTitle: getNode.getAddTitle().value, nodeDate: todayDate, nodeCheck: false })
     getData.setData({ nodeId: getData.getData().countNumber - 1, nodeTitle: getNode.getAddTitle().value, nodeContext: '', nodeCheck: false, nodeDate: todayDate })
+    getData.ssetArr()
     getNode.getAddTitle().value = ''
     allCheckVerify.setState(false)
+    getNode.getSeeAllBtn().checked = true
+    getNode.getSelectDate().value = ''
 }
 getNode.getTotalList().addEventListener('click', totalEvnt)
 function totalEvnt (event) {
@@ -195,10 +263,48 @@ function DataEvnt () {
     this.setState = (e) => {
         const dataSelect = document.createElement('input')
         dataSelect.type = 'date'
+        dataSelect.className = 'dataSelectInput'
+        dataSelect.id = 'dataSelectId' + e.id.substr(11)
+        e.textContent = ''
         e.appendChild(dataSelect)
-        console.log(dataSelect.value)
+        dataSelect.addEventListener('change', changeEvnt.setState)
+        window.addEventListener('click', inputClose.setState)
     }
 }
+function ChangeEvnt () {
+    this.setState = (e) => {
+        const { findArr, arr } = findArrIndex(e.target.parentNode.id.substr(11))
+        findArr.nodeDate = e.target.value
+        e.target.parentNode.textContent = e.target.value
+        getData.ssetArr(arr)
+    }
+}
+
+function sortArr (arr) { // 날짜 정렬
+    for (const i in arr) {
+        arr[i].nodeDate = Number(arr[i].nodeDate.substr(0, 4) + arr[i].nodeDate.substr(5, 2) + arr[i].nodeDate.substr(8, 2))
+    }
+    arr = arr.sort(function (previous, next) {
+        return previous.nodeDate - next.nodeDate
+    })
+    for (const i in arr) {
+        arr[i].nodeDate = String(arr[i].nodeDate).substr(0, 4) + '-' + String(arr[i].nodeDate).substr(4, 2) + '-' + String(arr[i].nodeDate).substr(6, 2)
+    }
+    return arr
+}
+
+function InputClose () {
+    this.setState = (e) => {
+        console.log(e)
+        const dateInput = document.querySelectorAll('.dataSelectInput')
+        console.log(dateInput)
+        if (dateInput.length === 1 && e.target.id !== dateInput[0].parentNode.id && e.target.id !== dateInput[0].id) {
+            const { findArr, arr } = findArrIndex(dateInput[0].id.substr(12))
+            dateInput[0].parentNode.textContent = findArr.nodeDate
+        }
+    }
+}
+
 function ModalEvnt () {
     const id = 0
     this.getId = () => {
@@ -219,14 +325,14 @@ function ModalEvnt () {
             modalContext.id = 'modalContextId' + id
             modal.className = 'modalDiv'
             modal.id = 'modalId' + id
-            const { modalContext: appenNode, findArr: appenArr } = modalContextUpdate(modalContext, id)
+            const { findArr: appenArr } = findArrIndex(id)
             const insertWrite = document.createElement('textarea')
             insertWrite.className = 'insertWriteDiv'
             insertWrite.id = 'insertWriteId' + id
             insertWrite.value = appenArr.nodeContext
             modalContext.textContent = appenArr.nodeContext
             modalContext.classList.add('modalContextDivOpen')
-            modal.appendChild(appenNode)
+            modal.appendChild(modalContext)
             modal.appendChild(insertWrite)
             e.parentNode.insertAdjacentElement('afterend', modal)
             modal.addEventListener('click', writeEvnt.setState)
@@ -238,10 +344,10 @@ function ModalEvnt () {
         }
     }
 }
-function modalContextUpdate (modalContext, id) {
+function findArrIndex (id) {
     const arr = getData.getData().loadingArr
     const findArr = arr.find(el => Number(el.nodeId) === Number(id))
-    return { modalContext, findArr, arr }
+    return { findArr, arr }
 }
 function WriteEvnt (e) {
     this.setState = (e) => {
@@ -261,7 +367,7 @@ function ReadEvnt () {
         const checkParent = document.querySelectorAll('.insertWriteDivOpen')
         console.log(checkParent)
         if (checkParent.length === 1 && e.target.id !== checkParent[0].parentNode.id && e.target.id !== checkParent[0].previousSibling.id && e.target.className !== checkParent[0].parentNode.previousSibling.childNodes[1].id && e.target.className !== 'insertWriteDiv insertWriteDivOpen') {
-            const { modalContext: appenNode, findArr: appenArr, arr } = modalContextUpdate(checkParent[0].parentNode.firstChild, checkParent[0].parentNode.id.substr(7))
+            const { findArr: appenArr, arr } = findArrIndex(checkParent[0].parentNode.id.substr(7))
             appenArr.nodeContext = checkParent[0].value
             getData.setArr(arr)
             checkParent[0].parentNode.firstChild.textContent = appenArr.nodeContext
@@ -300,7 +406,7 @@ function oneRemoveEvnt (e) {
     let newArr = getData.getData().loadingArr
     e.parentNode.remove()
     newArr = newArr.filter((el) => Number(el.nodeId) !== Number(e.id.substr(13)))
-    getData.setArr(newArr)
+    getData.ssetArr(newArr)
     beforCheck()
 }
 
@@ -326,7 +432,7 @@ function ClearChecked () {
         // const checkedNodes = document.querySelectorAll('.newList')
         let arr = getData.getData().loadingArr
         arr = arr.filter(detailCheck)
-        getData.setArr(arr)
+        getData.ssetArr(arr)
     }
 }
 
@@ -336,7 +442,7 @@ function ClearAll () {
         while (this.$target.hasChildNodes()) {
             this.$target.removeChild(this.$target.firstChild)
         }
-        getData.setArr([])
+        getData.ssetArr([])
     }
 }
 function detailCheck (e) {
