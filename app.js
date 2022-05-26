@@ -197,6 +197,7 @@ function SeeAllEvnt () {
         }
     }
 }
+
 function AllClickEvnt (e) {
     this.state = null
     this.setState = (e) => {
