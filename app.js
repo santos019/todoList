@@ -49,7 +49,12 @@ function Paint (initialState) {
         }
     }
 }
-
+function Today () {
+    const day = new Date()
+    this.getToday = () => {
+        return day.toISOString().substr(0, 10)
+    }
+}
 function FindData () {
     let output = localStorage.getItem('list')
     let loadingArr = JSON.parse(output) || []
@@ -70,6 +75,7 @@ function FindData () {
     this.setArr = (arr) => {
         loadingArr = arr
         localStorage.setItem('list', JSON.stringify(loadingArr))
+        drwaChart.setState(calculateGauge(arr))
     }
     this.ssetArr = (arr = loadingArr) => {
         loadingArr = arr
@@ -81,6 +87,7 @@ function FindData () {
             paint.setState(element)
             element.nodeId = getData.getData().countNumber - 1
         })
+        drwaChart.setState(calculateGauge(arr))
     }
     this.setCollect = (arr) => {
 
@@ -144,13 +151,9 @@ const inputClose = new InputClose()
 const seeAllEvnt = new SeeAllEvnt()
 const seeDateEvnt = new SeeDateEvnt()
 const changeGuageEvnt = new ChangeGuageEvnt()
+const drwaChart = new DrwaChart()
+const today = new Today()
 function start () { // 새로고침이나 페이지에 처음 들어갈 때 렌더링하는 함수
-    // getData.initDate() // 초기화
-    // const arr = getData.getData().loadingArr
-    // arr.forEach(element => {
-    //     paint.setState(element)
-    //     element.nodeId = getData.getData().countNumber - 1
-    // })
     getData.ssetArr()
     beforCheck()
 }
@@ -168,7 +171,6 @@ function SeeDateEvnt () {
         let arr = getData.getData().loadingArr
         const date = $target.value
         arr = arr.filter(el => el.nodeDate === date)
-        console.log(arr)
         getData.initDate() // 초기화
         getNode.getTotalList().textContent = ''
         arr.forEach(element => {
@@ -183,9 +185,7 @@ function SeeAllEvnt () {
     const selectDate = getNode.getSelectDate()
     seeAllNode.checked = true
     this.setState = (e) => { // 똑같이 그냥 ssetArr 호출하면됨
-        console.log(selectDate.value)
         if (seeAllNode.checked === true) {
-            console.log(seeAllNode.checked)
             selectDate.value = '----------'
             getData.ssetArr()
         } else if (selectDate.value === '') {
@@ -193,7 +193,6 @@ function SeeAllEvnt () {
             const todayDate = today.toISOString().substr(0, 10)
             selectDate.value = todayDate
             seeDateEvnt.setState()
-            console.log(todayDate)
         }
     }
 }
@@ -241,7 +240,6 @@ getNode.getAddListBtn().addEventListener('click', clickAddBtn)
 function clickAddBtn () { // state = {title, date(today), check(false)}
     const makeDate = new Date()
     const todayDate = makeDate.toISOString().substr(0, 10)
-    // paint.setState({ nodeTitle: getNode.getAddTitle().value, nodeDate: todayDate, nodeCheck: false })
     getData.setData({ nodeId: getData.getData().countNumber, nodeTitle: getNode.getAddTitle().value, nodeContext: '', nodeCheck: false, nodeDate: todayDate, nodeGauge: 0 })
     getData.ssetArr()
     getNode.getAddTitle().value = ''
@@ -282,7 +280,6 @@ function ChangeEvnt () {
     }
 }
 
-
 function sortArr (arr) { // 날짜 정렬
     for (const i in arr) {
         arr[i].nodeDate = Number(arr[i].nodeDate.substr(0, 4) + arr[i].nodeDate.substr(5, 2) + arr[i].nodeDate.substr(8, 2))
@@ -298,11 +295,9 @@ function sortArr (arr) { // 날짜 정렬
 
 function InputClose () {
     this.setState = (e) => {
-        console.log(e)
         const dateInput = document.querySelectorAll('.dataSelectInput')
-        console.log(dateInput)
         if (dateInput.length === 1 && e.target.id !== dateInput[0].parentNode.id && e.target.id !== dateInput[0].id) {
-            const { findArr, arr } = findArrIndex(dateInput[0].id.substr(12))
+            const { findArr } = findArrIndex(dateInput[0].id.substr(12))
             dateInput[0].parentNode.textContent = findArr.nodeDate
         }
     }
@@ -347,7 +342,6 @@ function ModalEvnt () {
             e.parentNode.insertAdjacentElement('afterend', modal)
             modal.addEventListener('click', writeEvnt.setState)
         } else if (e.parentNode.nextSibling.className === 'modalDiv') {
-            console.log(e.parentNode.nextSibling.className)
             modalNode.removeChild(modalNode.firstChild)
             modalNode.removeChild(modalNode.firstChild)
             modalNode.parentNode.removeChild(modalNode)
@@ -356,11 +350,9 @@ function ModalEvnt () {
 }
 function ChangeGuageEvnt () {
     this.setState = (e) => {
-        console.log(e.target.value)
-        const {findArr, arr} = findArrIndex(e.target.id.substr(17))
+        const { findArr, arr } = findArrIndex(e.target.id.substr(17))
         findArr.nodeGauge = e.target.value
         getData.setArr(arr)
-        console.log(e.target.id.substr(17))
     }
 }
 function findArrIndex (id) {
@@ -368,11 +360,10 @@ function findArrIndex (id) {
     const findArr = arr.find(el => Number(el.nodeId) === Number(id))
     return { findArr, arr }
 }
-function WriteEvnt (e) {
+function WriteEvnt () {
     this.setState = (e) => {
         const upParent = document.querySelectorAll('.insertWriteDivOpen')
         if ((e.target.classList.contains('modalContextDiv') || (e.target.className === 'modalDiv')) && (upParent.length === 0)) {
-            console.log('write')
             const parent = (e.target.classList.contains('modalContextDiv') ? e.target.parentNode : e.target)
             parent.firstChild.classList.toggle('modalContextDivOpen')
             parent.firstChild.nextSibling.classList.toggle('insertWriteDivOpen')
@@ -384,7 +375,6 @@ function WriteEvnt (e) {
 function ReadEvnt () {
     this.setState = (e) => {
         const checkParent = document.querySelectorAll('.insertWriteDivOpen')
-        console.log(checkParent)
         if (checkParent.length === 1 && e.target.id !== checkParent[0].parentNode.id && e.target.id !== checkParent[0].previousSibling.id && e.target.className !== checkParent[0].parentNode.previousSibling.childNodes[1].id && e.target.className !== 'insertWriteDiv insertWriteDivOpen') {
             const { findArr: appenArr, arr } = findArrIndex(checkParent[0].parentNode.id.substr(7))
             appenArr.nodeContext = checkParent[0].value
@@ -448,7 +438,6 @@ function ClearChecked () {
         this.render()
     }
     this.render = () => {
-        // const checkedNodes = document.querySelectorAll('.newList')
         let arr = getData.getData().loadingArr
         arr = arr.filter(detailCheck)
         getData.ssetArr(arr)
@@ -470,4 +459,39 @@ function detailCheck (e) {
         getNode.getTotalList().removeChild(removeLi)
         return false
     } else return true
+}
+
+function calculateGauge (arr) {
+    const day = today.getToday()
+    let count = 0
+    function sumCallback (sum, cur) {
+        if (cur.nodeDate === day) {
+            count += 1
+            return Number(sum) + Number(cur.nodeGauge)
+        }
+        return Number(sum)
+    }
+    const ans = arr.reduce((sumCallback), 0)
+    return count !== 0 ? (ans / count) * 2.5 : 0
+}
+
+// function drawNumber (before. current) {
+    
+// }
+function DrwaChart () {
+    const canvas = document.getElementById('todayChartId')
+    const ctx = canvas.getContext('2d')
+    ctx.strokeRect(5, 20, 251, 100)
+    this.setState = () => {
+        const endGuage = calculateGauge(getData.getData().loadingArr) 
+        ctx.clearRect(5, 45, 250, 50)
+        let cost = 0
+        ctx.fillStyle = 'rgb(8, 33, 116)'
+        ctx.strokeStyle = 'rgba(255, 255, 0, 0.5)'
+        const draw = setInterval(function () {
+            cost += 1
+            if (cost >= endGuage) clearInterval(draw)
+            ctx.fillRect(5, 45, cost, 50)
+        })
+    }
 }
