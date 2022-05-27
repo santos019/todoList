@@ -326,6 +326,7 @@ input[type=checkbox]:checked + label{
     height: 50px;
     float: left;
     display: none;
+    white-space:pre;
     background-color: rgb(223, 221, 218);
 }
 .modalContextDivOpen{

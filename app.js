@@ -466,14 +466,13 @@ function calculateGauge (arr) {
 }
 
 // function drawNumber (before. current) {
-    
 // }
 function DrwaChart () {
     const canvas = document.getElementById('todayChartId')
     const ctx = canvas.getContext('2d')
     ctx.strokeRect(5, 20, 251, 100)
     this.setState = () => {
-        const endGuage = calculateGauge(getData.getData().loadingArr) 
+        const endGuage = calculateGauge(getData.getData().loadingArr)
         ctx.clearRect(5, 45, 250, 50)
         let cost = 0
         ctx.fillStyle = 'rgb(8, 33, 116)'
