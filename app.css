@@ -74,6 +74,7 @@ body {
 .todayChart{
     width: 500px;
     height: 100px;
+    margin-left: 0.5%;
     background-color: rgb(255, 255, 255);
     border: 1px solid gray;
     float: left;
@@ -325,7 +326,7 @@ input[type=checkbox]:checked + label{
     height: 50px;
     float: left;
     display: none;
-    background-color: blanchedalmond;
+    background-color: rgb(223, 221, 218);
 }
 .modalContextDivOpen{
 
@@ -350,4 +351,161 @@ input[type=checkbox]:checked + label{
     height: 50px;
     background-color: aqua;
     float: left;
+}
+@media screen and (max-width: 767px) {
+    html {
+        width: 767px;
+    }
+    .todayNote{
+        width: 100px;
+        height: 50px;
+        font-size: 15px;
+    }
+    .headTitle{
+        width: 200px;
+        top: 110px;
+    }
+    .todayChart{
+        width: 300px;
+        height: 50px;
+    }
+    .listTitleDiv{
+        width: 300px;
+    }
+}
+@media screen and (min-width: 768px) and (max-width: 959px) {
+    html {
+        width: 959px;
+    }
+    .todayNote{
+        width: 100px;
+        height: 50px;
+        font-size: 15px;
+    }
+    .headTitle{
+        width: 200px;
+        top: 110px;
+    }
+    .todayChart{
+        width: 400px;
+        height: 50px;
+    }
+    .listTitleDiv{
+        width: 400px;
+    }
+    
+}
+@media screen and (min-width: 960px) and (max-width: 1145px) {
+    html {
+        width: 1145px;
+    }
+    .todayNote{
+        width: 100px;
+        height: 50px;
+        font-size: 15px;
+    }
+    .headTitle{
+        width: 200px;
+        top: 110px;
+    }
+    .todayChart{
+        width: 500px;
+        height: 50px;
+    }
+    .listTitleDiv{
+        width: 500px;
+    }
+    
+}
+@media screen and (min-width: 1146px) and (max-width: 1430px) {
+    html {
+        width: 1430px;
+
+    }
+    .todayNote{
+        width: 100px;
+        height: 50px;
+        font-size: 15px;
+    }
+    .headTitle{
+        width: 200px;
+        top: 110px;
+    }
+    .todayChart{
+        width: 600px;
+        height: 50px;
+    }
+    .listTitleDiv{
+        width: 650px;
+    }
+    
+}
+@media screen and (min-width: 1431px) and (max-width: 1601px) {
+    html {
+        width: 1601px;
+    }
+    .todayNote{
+        width: 100px;
+        height: 50px;
+        font-size: 15px;
+    }
+    .headTitle{
+        width: 200px;
+        top: 110px;
+    }
+    .todayChart{
+        width: 750px;
+        height: 50px;
+    }
+    .listTitleDiv{
+        width: 740px;
+    }
+    
+}
+@media screen and (min-width: 1602px) and (max-width: 1920px) {
+    html {
+        width: 1920px;
+
+    }
+    .todayNote{
+        width: 120px;
+        height: 80px;
+        font-size: 15px;
+        line-height: 5;
+    }
+    .headTitle{
+        width: 300px;
+        
+    }
+    .todayChart{
+        width: 950px;
+        height: 80px;
+    }
+    .listTitleDiv{
+        width: 920px;
+    }
+    
+}
+@media screen and (min-width: 1921px) {
+    html {
+        width: 1921px;
+
+    }
+    .todayNote{
+        width: 100px;
+        height: 50px;
+        font-size: 15px;
+    }
+    .headTitle{
+        width: 200px;
+        top: 110px;
+    }
+    .todayChart{
+        width: 850px;
+        height: 50px;
+    }
+    .listTitleDiv{
+        width: 920px;
+    }
+    
 }

@@ -4,7 +4,6 @@ function Paint (initialState) {
     this.state = initialState
     this.$target = document.getElementById('myListId')
     // const DayArr = ['일', '월', '화', '수', '목', '금', '토']
-    //    const countNumber = loadingArr.length === 0 ? 0 : loadingArr[loadingArr.length - 1].nodeId + 1
     this.setState = (nextState) => {
         this.state = nextState
         this.render(this.state)
@@ -65,12 +64,11 @@ function FindData () {
     }
     this.setData = ({ nodeId, nodeTitle, nodeContext, nodeCheck, nodeDate }) => {
         loadingArr.push({ nodeId: Number(nodeId), nodeTitle: String(nodeTitle), nodeContext: String(nodeContext), nodeCheck: Boolean(nodeCheck), nodeDate: String(nodeDate), nodeGauge: 0 })
-        // localStorage.setItem('list', JSON.stringify(loadingArr))
     }
     this.initDate = () => {
         output = localStorage.getItem('list')
         loadingArr = JSON.parse(output) || []
-        countNumber = 0 // loadingArr.length === 0 ? 0 : loadingArr[loadingArr.length - 1].nodeId + 1
+        countNumber = 0
     }
     this.setArr = (arr) => {
         loadingArr = arr
@@ -89,14 +87,8 @@ function FindData () {
         })
         drwaChart.setState(calculateGauge(arr))
     }
-    this.setCollect = (arr) => {
-
-    }
     this.updateCountNumber = () => {
         countNumber = countNumber + 1
-    }
-    this.initCountNumber = () => {
-        countNumber = 0
     }
 }
 
@@ -134,30 +126,32 @@ function GetNode () {
         return selectDate
     }
 }
-const clearChecked = new ClearChecked()
-const allClickEvnt = new AllClickEvnt()
-const allCheckVerify = new AllCheckVerify()
+const clearChecked = new ClearChecked() // 체크한 리스트를 삭제
+const allClickEvnt = new AllClickEvnt() // 모든 리스트 클릭
+const allCheckVerify = new AllCheckVerify() // 전체 선택 버튼의 활성화 여부 판단
 const getData = new FindData() // localStorage와 countNumber를 얻고, 갱신하는 인스턴스
 const getNode = new GetNode() // node를 찾는 인스턴스
 const paint = new Paint() // 리스트를 갱신하는 인스턴스
-const checkEvnt = new LabelEvnt()
-const clearAll = new ClearAll()
-const modalEvnt = new ModalEvnt()
-const writeEvnt = new WriteEvnt()
-const readEvnt = new ReadEvnt()
-const dataEvnt = new DataEvnt()
-const changeEvnt = new ChangeEvnt()
-const inputClose = new InputClose()
-const seeAllEvnt = new SeeAllEvnt()
-const seeDateEvnt = new SeeDateEvnt()
-const changeGuageEvnt = new ChangeGuageEvnt()
-const drwaChart = new DrwaChart()
-const today = new Today()
+const checkEvnt = new LabelEvnt() // 체크 버튼을 누르는 이벤트
+const clearAll = new ClearAll() // 모든 리스트를 삭제
+const modalEvnt = new ModalEvnt() // 모달이 열리는 이벤트
+const writeEvnt = new WriteEvnt() // 모달에서 글쓰기 화면으로 전환 되는 이벤트
+const readEvnt = new ReadEvnt() // 모달에서 다시 읽기 화면으로 전환 되는 이벤트
+const dateEvnt = new DateEvnt() // 달력 클릭 이벤트
+const changeEvnt = new ChangeEvnt() // 달력에서 날짜를 정하면 해당 변경사항을 저장하는 이벤트
+const inputClose = new InputClose() // 달력에서 날짜를 정하지 않고 윈도우를 클릭해서 달력을 종료했을 때, 다시 그전 날짜를 div에 띄어주는 이벤트
+const seeAllEvnt = new SeeAllEvnt() // 전체 리스트 보기 이벤트
+const seeDateEvnt = new SeeDateEvnt() // 달력에서 날짜를 정해서 리스를 보여주는 이벤트
+const changeGuageEvnt = new ChangeGuageEvnt() // 게이지가 변하면 달성률을 수정해주는 이벤트
+const drwaChart = new DrwaChart() // 달성률을 반영해서 차트를 그리는 이벤트
+const today = new Today() // 날짜를 얻는 생성자
+
 function start () { // 새로고침이나 페이지에 처음 들어갈 때 렌더링하는 함수
     getData.ssetArr()
     beforCheck()
 }
 start()
+
 getNode.getClearBtn().addEventListener('click', clearChecked.setState)
 getNode.getAllClickBtn().addEventListener('change', allClickEvnt.setState)
 getNode.getClearAllBtn().addEventListener('click', clearAll.setState)
@@ -189,9 +183,7 @@ function SeeAllEvnt () {
             selectDate.value = '----------'
             getData.ssetArr()
         } else if (selectDate.value === '') {
-            const today = new Date()
-            const todayDate = today.toISOString().substr(0, 10)
-            selectDate.value = todayDate
+            selectDate.value = today.getToday()
             seeDateEvnt.setState()
         }
     }
@@ -238,9 +230,7 @@ function AllCheckVerify () {
 
 getNode.getAddListBtn().addEventListener('click', clickAddBtn)
 function clickAddBtn () { // state = {title, date(today), check(false)}
-    const makeDate = new Date()
-    const todayDate = makeDate.toISOString().substr(0, 10)
-    getData.setData({ nodeId: getData.getData().countNumber, nodeTitle: getNode.getAddTitle().value, nodeContext: '', nodeCheck: false, nodeDate: todayDate, nodeGauge: 0 })
+    getData.setData({ nodeId: getData.getData().countNumber, nodeTitle: getNode.getAddTitle().value, nodeContext: '', nodeCheck: false, nodeDate: today.getToday(), nodeGauge: 0 })
     getData.ssetArr()
     getNode.getAddTitle().value = ''
     allCheckVerify.setState(false)
@@ -256,10 +246,10 @@ function totalEvnt (event) {
     } else if (event.target.className === 'listTitleDiv') {
         modalEvnt.setState(event.target)
     } else if (event.target.className === 'listDateDiv') {
-        dataEvnt.setState(event.target)
+        dateEvnt.setState(event.target)
     }
 }
-function DataEvnt () {
+function DateEvnt () {
     this.setState = (e) => {
         const dataSelect = document.createElement('input')
         dataSelect.type = 'date'
