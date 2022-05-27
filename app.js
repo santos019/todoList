@@ -92,7 +92,7 @@ function FindData () {
     }
 }
 
-function GetNode () {
+function GetNode () { // 제목을 보고 알 수 있을 정도로 달기 주석을 하지 말고 s를 붙이고
     const addListBtn = document.getElementById('addBtnId')
     const addTitle = document.getElementById('addTitleId')
     const totalList = document.getElementById('myListId')
@@ -180,7 +180,7 @@ function SeeAllEvnt () {
     seeAllNode.checked = true
     this.setState = (e) => { // 똑같이 그냥 ssetArr 호출하면됨
         if (seeAllNode.checked === true) {
-            selectDate.value = '----------'
+            selectDate.value = '' // 공백만
             getData.ssetArr()
         } else if (selectDate.value === '') {
             selectDate.value = today.getToday()
@@ -237,7 +237,8 @@ function clickAddBtn () { // state = {title, date(today), check(false)}
     getNode.getSeeAllBtn().checked = true
     getNode.getSelectDate().value = ''
 }
-getNode.getTotalList().addEventListener('click', totalEvnt)
+getNode.getTotalList().addEventListener('click', totalEvnt) // 화살표 함수로 바꾸세요~~~ 바인드 설명듣기~~~~
+
 function totalEvnt (event) {
     if (event.target.classList.contains('listInputLabel')) {
         checkEvnt.setState(event.target)
@@ -278,7 +279,7 @@ function sortArr (arr) { // 날짜 정렬
         return previous.nodeDate - next.nodeDate
     })
     for (const i in arr) {
-        arr[i].nodeDate = String(arr[i].nodeDate).substr(0, 4) + '-' + String(arr[i].nodeDate).substr(4, 2) + '-' + String(arr[i].nodeDate).substr(6, 2)
+        arr[i].nodeDate = String(arr[i].nodeDate).substring(0, 4) + '-' + String(arr[i].nodeDate).substr(4, 2) + '-' + String(arr[i].nodeDate).substr(6, 2)
     }
     return arr
 }
@@ -294,16 +295,8 @@ function InputClose () {
 }
 
 function ModalEvnt () {
-    const id = 0
-    this.getId = () => {
-        return id
-    }
-    this.setId = (nextId) => {
-        this.id = nextId
-    }
     this.setState = (e) => {
-        this.id = e.id.substr(12)
-        const id = this.id
+        const id = e.id.substr(12)
         const modalNode = document.getElementById('modalId' + id)
 
         if (modalNode === null) {
