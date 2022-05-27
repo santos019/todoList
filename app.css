@@ -335,7 +335,7 @@ input[type=checkbox]:checked + label{
 .insertWriteDiv{
     float: left;
     width: 99%;
-    height: 96%;
+    height: 50%;
     display: none;
     word-wrap: break-word;
 }
@@ -351,6 +351,10 @@ input[type=checkbox]:checked + label{
     height: 50px;
     background-color: aqua;
     float: left;
+}
+.input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    cursor: pointer;
 }
 @media screen and (max-width: 767px) {
     html {
