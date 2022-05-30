@@ -1,17 +1,96 @@
 // 렌더링은 setState와 render방식으로 구현하기~
+function deepCopy (object) { // depth 2
+    // console.log(object)
+    if (object === null || typeof object !== 'object') {
+        return object
+    }
+    const copy = {}
+    for (const key in object) {
+        copy[key] = deepCopy(object[key])
+    }
 
+    return copy
+}
 function Paint (initialState) {
     this.state = initialState
     this.$target = document.getElementById('myListId')
+    this.beforeArr = {}
+    this.afterArr = {}
+    this.beforeArrLen = 0
+    this.afterArrLen = 0
     // const DayArr = ['일', '월', '화', '수', '목', '금', '토']
     this.setState = (nextState) => {
-        this.state = nextState
-        this.render(this.state)
+        // 어차피 한 번에 바뀌는 건 하나의 노드뿐
+        this.afterArr = deepCopy(nextState)
+        console.log(this.beforeArr)
+        console.log(this.afterArr)
+        this.beforeArrLen = Object.keys(this.beforeArr).length
+        this.afterArrLen = Object.keys(this.afterArr).length
+        if (this.afterArrLen > this.beforeArrLen) { // 증가
+            this.addNode()
+        } else if (this.afterArrLen < this.beforeArrLen) { // 감소
+            this.minusNode()
+        } else { // 동일 상세 데이터 조회 후, 해당 노드만 다시 렌더링
+            this.detailNode()
+        }
+        // })
+        this.beforeArr = deepCopy(nextState)
+        // console.log(this.beforArr)
+        // this.render(this.state)
+    }
+    this.start = (nextState) => {
+        nextState.forEach(el => {
+            this.$target.appendChild(this.render(el))
+        })
+        this.beforArr = nextState
+    }
+    this.addNode = () => {
+        console.log(this.beforeArr)
+        console.log(this.afterArr)
+        for (const i in this.afterArr) {
+            console.log(i)
+            console.log(this.afterArr[i])
+            console.log(this.beforeArr[i])
+            console.log(this.afterArr[i] === this.beforeArr[i])
+            console.log(this.afterArr[i].nodeId !== this.beforeArr[i].nodeId)
+            if (Number(this.afterArr[i].nodeId) !== Number(this.beforeArr[i].nodeId)) { // 다르면 i의 앞에 넣는다.
+                // i의 앞에 넣는 함수 호출
+                console.log('ins')
+                const $addTarget = document.getElementById('newList' + this.beforeArr[i].nodeId)
+                $addTarget.insertAdjacentElement('beforebegin', this.render(this.afterArr[i]))
+                break
+            }
+            if (i === this.beforeArrLen) { // before의 마지막까지 모두 같으면 새로운 노드는 제일 마지막에 들어간다. // before.length의 뒤에 넣는 함수 호출
+                this.$target.appendChild(this.render(this.afterArr[i]))
+            }
+        }
+    }
+    this.minusNode = () => {
+        for (const i in this.afterArr) {
+            if (this.afterArr[i].nodeId !== this.beforArr[i].nodeId) { // 다르면 before에 있는거 그냥 삭제
+                const $minusTarget = document.getElementById('newList' + this.beforArr[i].nodeId)
+                $minusTarget.parentNode.removeChild($minusTarget)
+                break
+            }
+            if (i === this.afterArrLen - 1) { // 마지막 nextState까지 모두 돌았기 때문에, 없으면 before의 제일 마지막 노드를 삭제한다.
+                this.$target.removeChild(this.$target.lastChild)
+            }
+        }
+    }
+    this.detailNode = () => {
+        for (const i in this.afterArr) {
+            if (JSON.stringify(this.afterArr[i]) !== JSON.stringify(this.beforArr[i])) { // 지우고 다시 그리기? i번째 노드를 지우고 i번째 앞에 다시 그리기
+                const $changeRemoveNode = document.getElementById('newList' + this.afterArr[i].nodeId)
+                this.$target.insertAdjacentElement('afterend', this.render(this.afterArr[i]))
+                this.$target.removeChild($changeRemoveNode)
+            }
+        }
     }
 
     this.render = (state) => {
         // state 값은 제목과 날짜 체크여부 => 배열 인자 하나씩 넣어주기
         const countNumber = getData.getData().countNumber
+        // console.log(countNumber)
         const inserDate = document.createTextNode(state.nodeDate)
         const insertTitle = document.createTextNode(state.nodeTitle)
         const newList = document.createElement('li')
@@ -34,8 +113,8 @@ function Paint (initialState) {
         listDateDiv.id = 'listDateDiv' + countNumber
         listRemoveDiv.className = 'listRemoveDiv'
         listRemoveDiv.id = 'listRemoveDiv' + countNumber
-        getData.updateCountNumber()
-        this.$target.appendChild(newList)
+        // getData.updateCountNumber()
+        // this.$target.appendChild(newList)
         listTitleDiv.appendChild(insertTitle)
         listInputLabel.appendChild(listInput)
         newList.appendChild(listInputLabel)
@@ -46,6 +125,7 @@ function Paint (initialState) {
         if (state.nodeCheck === true) {
             changeCheckEvnt(listInputLabel)
         }
+        return newList
     }
 }
 function Today () {
@@ -57,7 +137,7 @@ function Today () {
 function FindData () {
     let output = localStorage.getItem('list')
     let loadingArr = JSON.parse(output) || []
-    let countNumber // 이벤트를 할 때 마다 갱신하기
+    let countNumber = 0 // 이벤트를 할 때 마다 갱신하기
 
     this.getData = () => { // countNumber를 이렇게 한 이유 : 새롭게 리스트를 추가했을 때 nodeId가 겹칠 수 있기 때문에 겹칠 일 없이 nodeId 최대
         return { output, loadingArr, countNumber }
@@ -73,19 +153,23 @@ function FindData () {
     this.setArr = (arr) => {
         loadingArr = arr
         localStorage.setItem('list', JSON.stringify(loadingArr))
-        drwaChart.setState(calculateGauge(arr))
+        drawChart.setState(calculateGauge(arr))
     }
     this.ssetArr = (arr = loadingArr) => {
         loadingArr = arr
-        countNumber = 0
-        getNode.getTotalList().textContent = ''
+        // countNumber = 0
+        // getNode.getTotalList().textContent = ''
         sortArr(loadingArr)
         localStorage.setItem('list', JSON.stringify(loadingArr))
-        arr.forEach(element => {
-            paint.setState(element)
-            element.nodeId = getData.getData().countNumber - 1
-        })
-        drwaChart.setState(calculateGauge(arr))
+        paint.setState(loadingArr)
+        // arr.forEach(element => {
+        //     paint.setState(element)
+        //     // element.nodeId = getData.getData().countNumber -1
+        // })
+        drawChart.setState(calculateGauge(arr))
+    }
+    this.start = () => {
+        paint.start(loadingArr)
     }
     this.updateCountNumber = () => {
         countNumber = countNumber + 1
@@ -143,11 +227,11 @@ const inputClose = new InputClose() // 달력에서 날짜를 정하지 않고 �
 const seeAllEvnt = new SeeAllEvnt() // 전체 리스트 보기 이벤트
 const seeDateEvnt = new SeeDateEvnt() // 달력에서 날짜를 정해서 리스를 보여주는 이벤트
 const changeGuageEvnt = new ChangeGuageEvnt() // 게이지가 변하면 달성률을 수정해주는 이벤트
-const drwaChart = new DrwaChart() // 달성률을 반영해서 차트를 그리는 이벤트
+const drawChart = new DrawChart() // 달성률을 반영해서 차트를 그리는 이벤트
 const today = new Today() // 날짜를 얻는 생성자
 
 function start () { // 새로고침이나 페이지에 처음 들어갈 때 렌더링하는 함수
-    getData.ssetArr()
+    getData.start()
     beforCheck()
 }
 start()
@@ -231,6 +315,7 @@ function AllCheckVerify () {
 getNode.getAddListBtn().addEventListener('click', clickAddBtn)
 function clickAddBtn () { // state = {title, date(today), check(false)}
     getData.setData({ nodeId: getData.getData().countNumber, nodeTitle: getNode.getAddTitle().value, nodeContext: '', nodeCheck: false, nodeDate: today.getToday(), nodeGauge: 0 })
+    getData.updateCountNumber()
     getData.ssetArr()
     getNode.getAddTitle().value = ''
     allCheckVerify.setState(false)
@@ -460,7 +545,7 @@ function calculateGauge (arr) {
 
 // function drawNumber (before. current) {
 // }
-function DrwaChart () {
+function DrawChart () {
     const canvas = document.getElementById('todayChartId')
     const ctx = canvas.getContext('2d')
     ctx.strokeRect(5, 20, 251, 100)
