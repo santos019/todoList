@@ -26,6 +26,8 @@ function Paint (initialState) {
         console.log(this.afterArr)
         this.beforeArrLen = Object.keys(this.beforeArr).length
         this.afterArrLen = Object.keys(this.afterArr).length
+        console.log(this.beforeArrLen)
+        console.log(this.afterArrLen)
         if (this.afterArrLen > this.beforeArrLen) { // 증가
             this.addNode()
         } else if (this.afterArrLen < this.beforeArrLen) { // 감소
@@ -42,12 +44,16 @@ function Paint (initialState) {
         nextState.forEach(el => {
             this.$target.appendChild(this.render(el))
         })
-        this.beforArr = nextState
+        this.beforeArr = deepCopy(nextState)
     }
     this.addNode = () => {
         console.log(this.beforeArr)
         console.log(this.afterArr)
-        for (const i in this.afterArr) {
+        console.log(this.beforeArrLen)
+        if (this.beforeArrLen === 0) {
+            this.$target.appendChild(this.render(this.afterArr[0]))
+        }
+        for (const i in this.beforeArr) {
             console.log(i)
             console.log(this.afterArr[i])
             console.log(this.beforeArr[i])
@@ -67,8 +73,8 @@ function Paint (initialState) {
     }
     this.minusNode = () => {
         for (const i in this.afterArr) {
-            if (this.afterArr[i].nodeId !== this.beforArr[i].nodeId) { // 다르면 before에 있는거 그냥 삭제
-                const $minusTarget = document.getElementById('newList' + this.beforArr[i].nodeId)
+            if (this.afterArr[i].nodeId !== this.beforeArr[i].nodeId) { // 다르면 before에 있는거 그냥 삭제
+                const $minusTarget = document.getElementById('newList' + this.beforeArr[i].nodeId)
                 $minusTarget.parentNode.removeChild($minusTarget)
                 break
             }
@@ -79,7 +85,7 @@ function Paint (initialState) {
     }
     this.detailNode = () => {
         for (const i in this.afterArr) {
-            if (JSON.stringify(this.afterArr[i]) !== JSON.stringify(this.beforArr[i])) { // 지우고 다시 그리기? i번째 노드를 지우고 i번째 앞에 다시 그리기
+            if (JSON.stringify(this.afterArr[i]) !== JSON.stringify(this.beforeArr[i])) { // 지우고 다시 그리기? i번째 노드를 지우고 i번째 앞에 다시 그리기
                 const $changeRemoveNode = document.getElementById('newList' + this.afterArr[i].nodeId)
                 this.$target.insertAdjacentElement('afterend', this.render(this.afterArr[i]))
                 this.$target.removeChild($changeRemoveNode)
