@@ -15,7 +15,7 @@
         <!-- 오늘의 달성률 -->
         <div class="todayNoteContainer">
             <div class="todayNote">오늘의 달성률</div>
-            <div class="todayChart">chart</div>
+            <canvas class="todayChart" id="todayChartId">chart</canvas>
         </div>
         <!-- 검색창 -->
         <div class="addListContainer">
@@ -29,7 +29,7 @@
                     <label id= "allCheckLabelId" class="allCheckLabel" for="allCheckInputId">전체 선택</label>
                 </div> 
                 <div class="seeSelectDate">
-                    <input id="seeSelectDataInputId" class="seeSelectDateInput" type="date" value="--">
+                    <input id="seeSelectDataInputId" class="seeSelectDateInput" type="date" value="">
                 </div>
                 <div class="seeAllList">
                     <input id="seeAllListInputId" class="seeAllListInput" type="checkbox" >

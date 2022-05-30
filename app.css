@@ -56,22 +56,27 @@ body {
 .todayNoteContainer{
     width: 70%;
     height: 100px;
-    background-color: antiquewhite;
 }
 .todayNote{
     width: 20%;
     height: 100%;
-    background-color: burlywood;
-    font-size: 35px;
-    font-weight: 900;
+    background: rgb(8, 33, 116);
+    background: linear-gradient( to bottom, rgb(28, 62, 131), rgba(5, 19, 82, 0.705));
+    font-size: 30px;
+    font-weight: 600;
     text-align: center;
+    line-height: 3;
     margin-left: 10%;
     float: left;
+    color: rgb(0, 0, 0);
+    border-radius:5% 5% 5% 5%;
 }
 .todayChart{
-    width: 60%;
-    height: 100%;
-    background-color: rgb(0, 225, 255);
+    width: 500px;
+    height: 100px;
+    margin-left: 0.5%;
+    background-color: rgb(255, 255, 255);
+    border: 1px solid gray;
     float: left;
 }
 .addListContainer{
@@ -89,10 +94,17 @@ body {
     width: 9.4%;
     height: 100%;
     float: left;
-    background-color: rgb(80, 123, 160);
+    background: rgb(8, 33, 116);
+    background: linear-gradient( to bottom, rgb(28, 62, 131), rgba(5, 19, 82, 0.705));
     text-align: center;
     font-size: 30px;
     cursor: pointer;
+    border-radius:0% 18% 18% 0%;
+}
+.addBtn:hover {
+    background: rgb(136, 156, 221);
+    background: linear-gradient( to bottom, rgb(33, 69, 139), rgba(50, 81, 216, 0.705));
+    transition-duration: 3s;
 }
 .listContainer{
     width: 70%;
@@ -120,10 +132,15 @@ body {
     float: left;
     /* border-bottom: 1px solid rgb(200, 196, 196); */
     background: white no-repeat left center;
+    border-radius: 10% 10% 10% 10%;
     background-size: 30px; 
     text-align: right;
     line-height: 1.8;
     background-image:url("./Icon/icons8-unchecked-checkbox-100.png");
+    cursor: pointer;
+}
+.allCheckLabel:hover {
+    background-color: rgb(217, 217, 217);
 }
 .allCheckInput{
     display: none;
@@ -132,25 +149,34 @@ input[type=checkbox]:checked + label{
     background-image:url("./Icon/icons8-tick-box-100.png");
 }
 .seeAllList{
-    width: 11%;
+    width: 20%;
     height: 100%;
     float: right;
+    margin-right: 1.5%;
+}
+.seeSelectDateInput{
+    cursor: pointer;
 }
 .seeAllListLabel{
     width: 100px;
     height: 30px;
-    float: left;
+    float: right;
+    border-radius: 10% 10% 10% 10%;
     background: white no-repeat left center;
     background-size: 30px; 
     text-align: right;
     line-height: 1.8;
     background-image:url("./Icon/icons8-unchecked-checkbox-100.png");
+    cursor: pointer;
+}
+.seeAllListLabel:hover {
+    background-color: rgb(217, 217, 217);
 }
 .seeAllListInput{
     display: none;
 }
 .seeSelectDate{
-    width: 10%;
+    width: 17%;
     height: 100%;
     padding-top: 0.3%;
     float: right;
@@ -160,6 +186,7 @@ input[type=checkbox]:checked + label{
     height: auto;
     list-style: none;
     padding: 0;
+    border: 1px solid gray;
 }
 .clearContainer{
     width: 100%;
@@ -168,20 +195,43 @@ input[type=checkbox]:checked + label{
     display: flex;
 }
 .checkedClear{
-    width: 50%;
-    height: 100%;
-    background-color: rgb(51, 255, 0);
+
+    flex-basis: 0%;
     text-align: center;
-    font-size: 40px;
-    font-weight: 900;
+    font-size: 35px;
+    cursor: pointer;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    font-weight: 700;
+    flex:auto;
+}
+.checkedClear:hover {
+    background: rgb(8, 33, 116);
+    background: linear-gradient( to bottom, rgb(28, 62, 131), rgba(5, 19, 82, 0.705));
+    color: whitesmoke;
+    transition-duration: 2s;
+    flex-grow: 3;
 }
 .AllClear{
-    width: 50%;
-    height: 100%;
-    background-color: rgb(77, 172, 53);
+    flex-basis: 0%;
     text-align: center;
-    font-size: 40px;
-    font-weight: 900;
+    font-size: 35px;
+    cursor: pointer;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    font-weight: 700;
+    flex:auto;
+  
+}
+.AllClear:hover{
+    background: rgb(8, 33, 116);
+    background: linear-gradient( to bottom, rgb(28, 62, 131), rgba(5, 19, 82, 0.705));
+    color: whitesmoke;
+    transition-duration: 2s;
+    flex-grow: 3;
+   
+    
+
 }
 .footerContainer{
     width: 100%;
@@ -208,9 +258,10 @@ input[type=checkbox]:checked + label{
 }
 .listInputLabel:hover{
     background-color: rgb(237, 236, 236);
+    
 }
 .listRemoveDiv:hover{
-    background-color: rgb(237, 236, 236);
+    background-color: rgb(220, 219, 219);
 }
 .listInputLabel{
     float: left;
@@ -232,7 +283,9 @@ input[type=checkbox]:checked + label{
 .listTitleDiv{
     width: 70%;
     height: 100%;
-
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
     float: left;
     margin-left: 3px;
 }
@@ -255,20 +308,26 @@ input[type=checkbox]:checked + label{
     height:30px;
     margin-left: 25px;
     background-image:url("./Icon/free-icon-font-trash-3917378.png");
+    cursor: pointer;
 }
 .listTitleDivTrue {
     text-decoration: line-through;
 }
 .modalDiv{
     height: 120px;
-    background-color: blueviolet;
+    width: 100%;
+    border-bottom: 1px solid gray;
+    border-right: 1px solid gray;
+    border-left: 1px solid gray;
+    float: left;
 }
 .modalContextDiv{
     width: 100%;
     height: 50px;
     float: left;
     display: none;
-    background-color: blanchedalmond;
+    white-space:pre;
+    background-color: rgb(223, 221, 218);
 }
 .modalContextDivOpen{
 
@@ -276,11 +335,182 @@ input[type=checkbox]:checked + label{
 }
 .insertWriteDiv{
     float: left;
+    width: 99%;
+    height: 50%;
     display: none;
+    word-wrap: break-word;
 }
 .insertWriteDivOpen{
     display: block;
 }
 .textblock{
     display: block;
+}
+.modalGuageInput{
+    width: 80%;
+    margin-left: 10%;
+    height: 50px;
+    background-color: aqua;
+    float: left;
+}
+.input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    cursor: pointer;
+}
+@media screen and (max-width: 767px) {
+    html {
+        width: 767px;
+    }
+    .todayNote{
+        width: 100px;
+        height: 50px;
+        font-size: 15px;
+    }
+    .headTitle{
+        width: 200px;
+        top: 110px;
+    }
+    .todayChart{
+        width: 300px;
+        height: 50px;
+    }
+    .listTitleDiv{
+        width: 300px;
+    }
+}
+@media screen and (min-width: 768px) and (max-width: 959px) {
+    html {
+        width: 959px;
+    }
+    .todayNote{
+        width: 100px;
+        height: 50px;
+        font-size: 15px;
+    }
+    .headTitle{
+        width: 200px;
+        top: 110px;
+    }
+    .todayChart{
+        width: 400px;
+        height: 50px;
+    }
+    .listTitleDiv{
+        width: 400px;
+    }
+    
+}
+@media screen and (min-width: 960px) and (max-width: 1145px) {
+    html {
+        width: 1145px;
+    }
+    .todayNote{
+        width: 100px;
+        height: 50px;
+        font-size: 15px;
+    }
+    .headTitle{
+        width: 200px;
+        top: 110px;
+    }
+    .todayChart{
+        width: 500px;
+        height: 50px;
+    }
+    .listTitleDiv{
+        width: 500px;
+    }
+    
+}
+@media screen and (min-width: 1146px) and (max-width: 1430px) {
+    html {
+        width: 1430px;
+
+    }
+    .todayNote{
+        width: 100px;
+        height: 50px;
+        font-size: 15px;
+    }
+    .headTitle{
+        width: 200px;
+        top: 110px;
+    }
+    .todayChart{
+        width: 600px;
+        height: 50px;
+    }
+    .listTitleDiv{
+        width: 650px;
+    }
+    
+}
+@media screen and (min-width: 1431px) and (max-width: 1601px) {
+    html {
+        width: 1601px;
+    }
+    .todayNote{
+        width: 100px;
+        height: 50px;
+        font-size: 15px;
+    }
+    .headTitle{
+        width: 200px;
+        top: 110px;
+    }
+    .todayChart{
+        width: 750px;
+        height: 50px;
+    }
+    .listTitleDiv{
+        width: 740px;
+    }
+    
+}
+@media screen and (min-width: 1602px) and (max-width: 1920px) {
+    html {
+        width: 1920px;
+
+    }
+    .todayNote{
+        width: 120px;
+        height: 80px;
+        font-size: 15px;
+        line-height: 5;
+    }
+    .headTitle{
+        width: 300px;
+        
+    }
+    .todayChart{
+        width: 950px;
+        height: 80px;
+    }
+    .listTitleDiv{
+        width: 920px;
+    }
+    
+}
+@media screen and (min-width: 1921px) {
+    html {
+        width: 1921px;
+
+    }
+    .todayNote{
+        width: 100px;
+        height: 50px;
+        font-size: 15px;
+    }
+    .headTitle{
+        width: 200px;
+        top: 110px;
+    }
+    .todayChart{
+        width: 850px;
+        height: 50px;
+    }
+    .listTitleDiv{
+        width: 920px;
+    }
+    
 }
