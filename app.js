@@ -3,8 +3,6 @@
 function Paint (initialState) {
     this.state = initialState
     this.$target = document.getElementById('myListId')
-    // const DayArr = ['일', '월', '화', '수', '목', '금', '토']
-    //    const countNumber = loadingArr.length === 0 ? 0 : loadingArr[loadingArr.length - 1].nodeId + 1
     this.setState = (nextState) => {
         this.state = nextState
         this.render(this.state)
