@@ -28,8 +28,8 @@ function Paint (initialState) {
         this.afterArr = deepCopy(nextState)
         console.log(typeof this.beforeArr)
         console.log(this.afterArr)
-        this.beforeArrLen = Object.keys(this.beforeArr).length
-        this.afterArrLen = Object.keys(this.afterArr).length
+        this.beforeArrLen = this.beforeArr.length
+        this.afterArrLen = this.afterArr.length
         console.log(this.beforeArrLen)
         console.log(this.afterArrLen)
         if (this.afterArrLen > this.beforeArrLen) { // 증가
@@ -66,23 +66,21 @@ function Paint (initialState) {
             }
         }
     }
-    this.minusNode = () => {
-        if (this.count >= this.afterArrLen) {
-            console.log(this.count + '이후로 전부 삭제입니다')
-            this.count = 0
-            for (let i = Number(this.count); i <= Number(this.beforeArrLen - 1); i++) {
-                console.log(i)
+    this.minusNode = () => { // 노드 데이터 순서대로 정렬하고 지우기
+        this.afterArr = sortArrForNodeId(this.afterArr)
+        this.beforeArr = sortArrForNodeId(this.beforeArr)
+        if (this.count > this.afterArrLen - 1) {
+            for (let i = Number(this.count); i <= this.beforeArr.length - 1; i++) {
                 const $minusTarget = document.getElementById('newList' + this.beforeArr[i].nodeId)
-                console.log($minusTarget)
                 this.$target.removeChild($minusTarget)
             }
+            this.count = 0
             return
         }
         if (Number(this.afterArr[this.count].nodeId) === Number(this.beforeArr[this.count].nodeId)) {
             this.count++
         } else {
             const $minusTarget = document.getElementById('newList' + this.beforeArr[this.count].nodeId)
-            console.log($minusTarget)
             this.$target.removeChild($minusTarget)
             this.beforeArr = this.beforeArr.filter(el => Number(el.nodeId) !== Number(this.beforeArr[this.count].nodeId))
         }
@@ -466,6 +464,13 @@ function sortArr (arr) { // 날짜 정렬
     for (const i in arr) {
         arr[i].nodeDate = String(arr[i].nodeDate).substring(0, 4) + '-' + String(arr[i].nodeDate).substr(4, 2) + '-' + String(arr[i].nodeDate).substr(6, 2)
     }
+    return arr
+}
+
+function sortArrForNodeId (arr) {
+    arr = arr.sort(function (previous, next) {
+        return Number(previous.nodeId) - Number(next.nodeId)
+    })
     return arr
 }
 
