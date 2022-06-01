@@ -24,14 +24,9 @@ function Paint (initialState) {
     // const DayArr = ['일', '월', '화', '수', '목', '금', '토']
     this.setState = (nextState) => {
         // 어차피 한 번에 바뀌는 건 하나의 노드뿐
-        console.log(nextState)
         this.afterArr = deepCopy(nextState)
-        console.log(typeof this.beforeArr)
-        console.log(this.afterArr)
         this.beforeArrLen = this.beforeArr.length
         this.afterArrLen = this.afterArr.length
-        console.log(this.beforeArrLen)
-        console.log(this.afterArrLen)
         if (this.afterArrLen > this.beforeArrLen) { // 증가
             this.addNode()
         } else if (this.afterArrLen < this.beforeArrLen) { // 감소
@@ -69,8 +64,11 @@ function Paint (initialState) {
     this.minusNode = () => { // 노드 데이터 순서대로 정렬하고 지우기
         this.afterArr = sortArrForNodeId(this.afterArr)
         this.beforeArr = sortArrForNodeId(this.beforeArr)
+        console.log(this.beforeArr)
         if (this.count > this.afterArrLen - 1) {
+            console.log('여기는 끝')
             for (let i = Number(this.count); i <= this.beforeArr.length - 1; i++) {
+                console.log(i)
                 const $minusTarget = document.getElementById('newList' + this.beforeArr[i].nodeId)
                 this.$target.removeChild($minusTarget)
             }
@@ -80,9 +78,12 @@ function Paint (initialState) {
         if (Number(this.afterArr[this.count].nodeId) === Number(this.beforeArr[this.count].nodeId)) {
             this.count++
         } else {
+            console.log(this.beforeArr[this.count].nodeId)
             const $minusTarget = document.getElementById('newList' + this.beforeArr[this.count].nodeId)
+            console.log($minusTarget)
             this.$target.removeChild($minusTarget)
             this.beforeArr = this.beforeArr.filter(el => Number(el.nodeId) !== Number(this.beforeArr[this.count].nodeId))
+            console.log(this.beforeArr)
         }
         this.minusNode()
     }
@@ -629,8 +630,8 @@ function ClearAll () {
 }
 function detailCheck (e) {
     if (e.nodeCheck) {
-        const removeLi = document.getElementById('newList' + e.nodeId)
-        getNode.getTotalList().removeChild(removeLi)
+        // const removeLi = document.getElementById('newList' + e.nodeId)
+        // getNode.getTotalList().removeChild(removeLi)
         return false
     } else return true
 }
