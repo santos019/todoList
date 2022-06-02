@@ -30,8 +30,11 @@ function Paint (initialState) {
         if (this.afterArrLen > this.beforeArrLen) { // 증가
             this.addNode()
         } else if (this.afterArrLen < this.beforeArrLen) { // 감소
+            this.afterArr = sortArrForNodeId(this.afterArr)
+            this.beforeArr = sortArrForNodeId(this.beforeArr)
             this.minusNode()
         } else { // 동일 상세 데이터 조회 후, 해당 노드만 다시 렌더링
+            // this.afterArr = sortArrForNodeId(this.afterArr)
             this.detailNode()
         }
         // })
@@ -48,27 +51,20 @@ function Paint (initialState) {
     this.addNode = () => {
         if (this.beforeArrLen === 0) {
             this.$target.appendChild(this.render(this.afterArr[0]))
+            return
         }
-        for (const i in this.beforeArr) {
-            if (Number(this.afterArr[i].nodeId) !== Number(this.beforeArr[i].nodeId)) { // 다르면 i의 앞에 넣는다.
-                // i의 앞에 넣는 함수 호출
-                const $addTarget = document.getElementById('newList' + this.beforeArr[i].nodeId)
-                $addTarget.insertAdjacentElement('beforebegin', this.render(this.afterArr[i]))
-                break
-            }
-            if (Number(i) === Number(this.beforeArrLen - 1)) { // before의 마지막까지 모두 같으면 새로운 노드는 제일 마지막에 들어간다. // before.length의 뒤에 넣는 함수 호출
-                this.$target.appendChild(this.render(this.afterArr[Number(this.beforeArrLen)]))
-            }
+        const i = this.beforeArr.findIndex((node, index) => Number(node.nodeId) !== Number(this.afterArr[index].nodeId))
+
+        if (i === -1) {
+            this.$target.appendChild(this.render(this.afterArr[Number(this.beforeArrLen)]))
+        } else {
+            const $addTarget = document.getElementById('newList' + this.beforeArr[i].nodeId)
+            $addTarget.insertAdjacentElement('beforebegin', this.render(this.afterArr[i]))
         }
     }
     this.minusNode = () => { // 노드 데이터 순서대로 정렬하고 지우기
-        this.afterArr = sortArrForNodeId(this.afterArr)
-        this.beforeArr = sortArrForNodeId(this.beforeArr)
-        console.log(this.beforeArr)
         if (this.count > this.afterArrLen - 1) {
-            console.log('여기는 끝')
             for (let i = Number(this.count); i <= this.beforeArr.length - 1; i++) {
-                console.log(i)
                 const $minusTarget = document.getElementById('newList' + this.beforeArr[i].nodeId)
                 this.$target.removeChild($minusTarget)
             }
@@ -78,107 +74,30 @@ function Paint (initialState) {
         if (Number(this.afterArr[this.count].nodeId) === Number(this.beforeArr[this.count].nodeId)) {
             this.count++
         } else {
-            console.log(this.beforeArr[this.count].nodeId)
             const $minusTarget = document.getElementById('newList' + this.beforeArr[this.count].nodeId)
-            console.log($minusTarget)
             this.$target.removeChild($minusTarget)
             this.beforeArr = this.beforeArr.filter(el => Number(el.nodeId) !== Number(this.beforeArr[this.count].nodeId))
-            console.log(this.beforeArr)
         }
         this.minusNode()
     }
-    // this.minusNode = () => {
-    //     console.log(this.beforeCount)
-    //     console.log(this.afterCount)
-    //     if ((this.afterCount >= this.afterArrLen) || (this.beforeCount >= this.beforeArrLen)) {
-    //         if (this.beforeCount < this.beforeArrLen) {
-    //             for (let i = Number(this.beforeCount); i <= Number(this.beforeArrLen - 1); i++) {
-    //                 console.log(i)
-    //                 const $minusTarget = document.getElementById('newList' + this.beforeArr[i].nodeId)
-    //                 console.log($minusTarget)
-    //                 this.$target.removeChild($minusTarget)
-    //             }
-    //         }
-    //         this.beforeCount = 0
-    //         this.afterCount = 0
-    //         return
-    //     }
-    //     if (Number(this.beforeArr[this.beforeCount].nodeId) === Number(this.afterArr[this.afterCount].nodeId)) {
-    //         this.beforeCount++
-    //         this.afterCount++
-    //     } else {
-    //         const $minusTarget = document.getElementById('newList' + this.beforeArr[`${this.beforeCount}`].nodeId)
-    //         console.log($minusTarget)
-    //         console.log('newList' + this.beforeArr[`${this.beforeCount}`].nodeId)
-    //         this.$target.removeChild($minusTarget)
-    //         this.beforeCount++
-    //     }
-    //     this.minusNode()
-    // }
-
-    // this.minusNode = () => {
-    //     console.log(this.afterArr)
-    //     console.log(this.beforeArr)
-    //     const minusBeforeArrLen = Object.keys(this.beforeArr).length
-    //     console.log(minusBeforeArrLen)
-    //     // console.log(this.afterArr[this.count].nodeId)
-    //     if (Number(this.count) >= Number(this.afterArrLen)) {
-    //         if (Number(minusBeforeArrLen) !== this.afterArrLen) {
-    //             const $minusTarget = document.getElementById('newList' + this.beforeArr[this.count].nodeId)
-    //             this.$target.removeChild($minusTarget)
-    //         }
-    //         this.count = 0
-    //     } else {
-    //         let test = String(this.count)
-    //         console.log('in')
-    //         console.log((this.count))
-    //         console.log(Number(this.count))
-    //         console.log(this.afterArr)
-    //         console.log(this.afterArr['0'])
-    //         console.log(typeof this.count)
-    //         console.log(typeof this.afterArr)
-    //         console.log(this.afterArr[test])
-    //         console.log(this.afterArr[`${this.count}`])
-    //         console.log(this.beforeArr[test])
-    //         console.log(this.beforeArr[`${this.count}`])
-    //         if (Number(this.afterArr[Number(this.count)].nodeId) === Number(this.beforeArr[Number(this.count)].nodeId)) {
-    //             this.count += 1
-    //             console.log('1')
-    //         } else {
-    //             console.log('2')
-    //             const $minusTarget = document.getElementById('newList' + this.beforeArr[this.count].nodeId)
-    //             this.$target.removeChild($minusTarget)
-    //             console.log(this.beforeArr)
-    //             console.log(this.count)
-    //             console.log(this.beforeArr[Number(this.count)].nodeId)
-    //             delete this.beforeArr[`${this.count}`]
-    //             // this.beforeArr = deepCopy(this.beforeArr.filter(el => console.log(el))) //Number(el.nodeId) !== Number(this.beforeArr[`${this.count}`].nodeId))
-    //             console.log(this.beforeArr)
-    //         }
-    //         this.minusNode()
-    //     }
-    // }
-    // this.minusNode = () => {
-    //     console.log(this.afterArr)
-    //     for (const i in this.afterArr) {
-    //         if (this.afterArr[i].nodeId !== this.beforeArr[i].nodeId) { // 다르면 before에 있는거 그냥 삭제
-    //             const $minusTarget = document.getElementById('newList' + this.beforeArr[i].nodeId)
-    //             $minusTarget.parentNode.removeChild($minusTarget)
-    //             break
-    //         }
-    //         if (i === this.afterArrLen - 1) { // 마지막 nextState까지 모두 돌았기 때문에, 없으면 before의 제일 마지막 노드를 삭제한다.
-    //             this.$target.removeChild(this.$target.lastChild)
-    //         }
-    //     }
-    // }
     this.detailNode = () => {
+        const objBeforArr = this.beforeArr.reduce(function (target, key, index) {
+            target[key.nodeId] = key
+            return target
+        }, {})
+        let changeIndex = 0
+        let index = 0
         for (const i in this.afterArr) {
-            if (JSON.stringify(this.afterArr[i]) !== JSON.stringify(this.beforeArr[i])) { // 지우고 다시 그리기? i번째 노드를 지우고 i번째 앞에 다시 그리기
-                const $changeRemoveNode = document.getElementById('newList' + this.afterArr[i].nodeId)
-                this.$target.insertAdjacentElement('afterend', this.render(this.afterArr[i]))
-                this.$target.removeChild($changeRemoveNode)
+            if (JSON.stringify(this.afterArr[i]) !== JSON.stringify(objBeforArr[this.afterArr[i].nodeId])) {
+                changeIndex = this.afterArr[i].nodeId
+                index = i
             }
         }
+        const $changeTarget = document.getElementById('newList' + changeIndex)
+        this.$target.removeChild($changeTarget)
+        if (index - 1 < 0) {
+            this.$target.insertAdjacentElement('afterbegin', this.render(this.afterArr[index]))
+        } else { this.$target.childNodes[index - 1].insertAdjacentElement('afterend', this.render(this.afterArr[index])) }
     }
 
     this.render = (state) => {
@@ -247,17 +166,11 @@ function FindData () {
         localStorage.setItem('list', JSON.stringify(loadingArr))
         drawChart.setState(calculateGauge(arr))
     }
-    this.ssetArr = (arr = loadingArr) => {
+    this.renderArr = (arr = loadingArr) => {
         loadingArr = arr
-        // countNumber = 0
-        // getNode.getTotalList().textContent = ''
         sortArr(loadingArr)
         localStorage.setItem('list', JSON.stringify(loadingArr))
         paint.setState(loadingArr)
-        // arr.forEach(element => {
-        //     paint.setState(element)
-        //     // element.nodeId = getData.getData().countNumber -1
-        // })
         drawChart.setState(calculateGauge(arr))
     }
     this.start = () => {
@@ -361,10 +274,10 @@ function SeeAllEvnt () {
     const seeAllNode = getNode.getSeeAllBtn()
     const selectDate = getNode.getSelectDate()
     seeAllNode.checked = true
-    this.setState = (e) => { // 똑같이 그냥 ssetArr 호출하면됨
+    this.setState = (e) => { // 똑같이 그냥 renderArr 호출하면됨
         if (seeAllNode.checked === true) {
             selectDate.value = '' // 공백만
-            getData.ssetArr()
+            getData.renderArr()
         } else if (selectDate.value === '') {
             selectDate.value = today.getToday()
             seeDateEvnt.setState()
@@ -414,7 +327,7 @@ function AllCheckVerify () {
 getNode.getAddListBtn().addEventListener('click', clickAddBtn)
 function clickAddBtn () { // state = {title, date(today), check(false)}
     getData.setData({ nodeId: getData.getData().countNumber, nodeTitle: getNode.getAddTitle().value, nodeContext: '', nodeCheck: false, nodeDate: today.getToday(), nodeGauge: 0 })
-    getData.ssetArr()
+    getData.renderArr()
     getData.updateCountNumber()
     getNode.getAddTitle().value = ''
     allCheckVerify.setState(false)
@@ -451,7 +364,7 @@ function ChangeEvnt () {
         const { findArr, arr } = findArrIndex(e.target.parentNode.id.substr(11))
         findArr.nodeDate = e.target.value
         e.target.parentNode.textContent = e.target.value
-        getData.ssetArr(arr)
+        getData.renderArr(arr)
     }
 }
 
@@ -590,7 +503,7 @@ function oneRemoveEvnt (e) {
     // e.parentNode.remove()
     newArr = newArr.filter((el) => Number(el.nodeId) !== Number(e.id.substr(13)))
     console.log(newArr)
-    getData.ssetArr(newArr)
+    getData.renderArr(newArr)
     beforCheck()
 }
 
@@ -615,7 +528,7 @@ function ClearChecked () {
     this.render = () => {
         let arr = getData.getData().loadingArr
         arr = arr.filter(detailCheck)
-        getData.ssetArr(arr)
+        getData.renderArr(arr)
     }
 }
 
@@ -625,7 +538,7 @@ function ClearAll () {
         while (this.$target.hasChildNodes()) {
             this.$target.removeChild(this.$target.firstChild)
         }
-        getData.ssetArr([])
+        getData.renderArr([])
     }
 }
 function detailCheck (e) {
