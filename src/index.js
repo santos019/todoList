@@ -1,3 +1,4 @@
+import './assets/app.css'
 // 렌더링은 setState와 render방식으로 구현하기~
 const deepCopy = (object) => { // depth 2
     if (object === null || typeof object !== 'object') {
@@ -27,12 +28,13 @@ const changeCheckEvnt = (e) => {
 }
 
 const allCheckVerify = (e) => {
-    this.state = null
-    this.$target = document.getElementById('allCheckInputId')
-    this.$labelTarget = document.getElementById('allCheckLabelId')
-    this.state = e
-    this.$target.checked = e
-    this.$labelTarget.textContent = (e === true ? '전체 해제' : '전체 선택')
+    console.log(e)
+    // let state = true
+    const $target = document.getElementById('allCheckInputId')
+    const $labelTarget = document.getElementById('allCheckLabelId')
+    // state = e
+    $target.checked = e
+    $labelTarget.textContent = (e === true ? '전체 해제' : '전체 선택')
 }
 
 function Paint (initialState) {
