@@ -266,10 +266,11 @@ input[type=checkbox]:checked + label{
 .listInputLabel{
     float: left;
     width: 30px;
-    height: 100%;
+    height: 32px;
     background-size: 30px;
     background-image:url("./Icon/icons8-unchecked-checkbox-100.png");
     background-color: rgb(255, 255, 255);
+    background-repeat: no-repeat;
     cursor: pointer;
 }
 .listInputLabelTrue{
@@ -282,7 +283,7 @@ input[type=checkbox]:checked + label{
 }
 .listTitleDiv{
     width: 70%;
-    height: 100%;
+    height: 32px;
     overflow:hidden;
     text-overflow:ellipsis;
     white-space:nowrap;
@@ -293,7 +294,7 @@ input[type=checkbox]:checked + label{
     width: 15%;
     float: left;
     font-size: 11px;
-    height: 100%;
+    height: 32px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -513,4 +514,7 @@ input[type=checkbox]:checked + label{
         width: 920px;
     }
     
+}
+.modalOpen{
+    height: 150px;
 }

@@ -14,9 +14,9 @@ function deepCopy (object) { // depth 2
 function Paint (initialState) {
     this.state = initialState
     this.$target = document.getElementById('myListId')
-    this.beforeArr = []
+    this.beforeArr = deepCopy(getData.getData().loadingArr)
     this.afterArr = []
-    this.beforeArrLen = 0
+    this.beforeArrLen = this.beforeArr.length
     this.afterArrLen = 0
     this.count = 0
     // this.beforeCount = 0
@@ -27,8 +27,12 @@ function Paint (initialState) {
         this.afterArr = deepCopy(nextState)
         this.beforeArrLen = this.beforeArr.length
         this.afterArrLen = this.afterArr.length
-        if (this.afterArrLen > this.beforeArrLen) { // 증가
+        if ((this.afterArrLen > this.beforeArrLen) || (this.afterArrLen > 0 && this.beforeArrLen === 0)) { // 증가
             this.addNode()
+        } else if (this.afterArr.length === 0) {
+            while (this.$target.hasChildNodes()) {
+                this.$target.removeChild(this.$target.firstChild)
+            }
         } else if (this.afterArrLen < this.beforeArrLen) { // 감소
             this.afterArr = sortArrForNodeId(this.afterArr)
             this.beforeArr = sortArrForNodeId(this.beforeArr)
@@ -39,14 +43,11 @@ function Paint (initialState) {
         }
         // })
         this.beforeArr = deepCopy(nextState)
-        // console.log(this.beforArr)
-        // this.render(this.state)
     }
     this.start = (nextState) => {
         nextState.forEach(el => {
             this.$target.appendChild(this.render(el))
         })
-        this.beforeArr = deepCopy(nextState)
     }
     this.addNode = () => {
         if (this.beforeArrLen === 0) {
@@ -81,23 +82,29 @@ function Paint (initialState) {
         this.minusNode()
     }
     this.detailNode = () => {
+        const allList = document.getElementsByClassName('newList')
         const objBeforArr = this.beforeArr.reduce(function (target, key, index) {
             target[key.nodeId] = key
             return target
         }, {})
-        let changeIndex = 0
-        let index = 0
-        for (const i in this.afterArr) {
-            if (JSON.stringify(this.afterArr[i]) !== JSON.stringify(objBeforArr[this.afterArr[i].nodeId])) {
-                changeIndex = this.afterArr[i].nodeId
-                index = i
-            }
+        let modalOpenValue = false
+        const index = this.afterArr.findIndex((node, i) => JSON.stringify(node) !== JSON.stringify(objBeforArr[this.afterArr[i].nodeId]))
+        const changedNodeId = this.afterArr[index].nodeId
+        const $changeTarget = document.getElementById('newList' + changedNodeId)
+        if ($changeTarget.classList.contains('modalOpen')) { // 모달이 열려있으면
+            modalOpenValue = true
         }
-        const $changeTarget = document.getElementById('newList' + changeIndex)
+        const changedNode = this.render(this.afterArr[index])
         this.$target.removeChild($changeTarget)
         if (index - 1 < 0) {
-            this.$target.insertAdjacentElement('afterbegin', this.render(this.afterArr[index]))
-        } else { this.$target.childNodes[index - 1].insertAdjacentElement('afterend', this.render(this.afterArr[index])) }
+            this.$target.insertAdjacentElement('afterbegin', changedNode)
+        } else {
+            allList[index - 1].insertAdjacentElement('afterend', changedNode)
+        }
+        if (modalOpenValue === true) {
+            // $changeTarget.classList.add('modalOpen')
+            modalEvnt.setState(changedNode)
+        }
     }
 
     this.render = (state) => {
@@ -124,8 +131,6 @@ function Paint (initialState) {
         listDateDiv.id = 'listDateDiv' + state.nodeId
         listRemoveDiv.className = 'listRemoveDiv'
         listRemoveDiv.id = 'listRemoveDiv' + state.nodeId
-        // getData.updateCountNumber()
-        // this.$target.appendChild(newList)
         listTitleDiv.appendChild(insertTitle)
         listInputLabel.appendChild(listInput)
         newList.appendChild(listInputLabel)
@@ -183,11 +188,23 @@ function FindData () {
         countNumber = Number(maxIndex + 1)
         paint.start(loadingArr)
     }
+
     this.updateCountNumber = () => {
         countNumber = countNumber + 1
     }
 }
-
+const beforCheck = () => {
+    const arr = getData.getData().loadingArr
+    if (arr.length === 0) allCheckVerify.setState(false)
+    for (const i in arr) {
+        if (arr[i].nodeCheck === false) {
+            allCheckVerify.setState(false)
+            return
+        } else if (Number(i) === (arr.length - 1)) {
+            allCheckVerify.setState(true)
+        }
+    }
+}
 function GetNode () { // 제목을 보고 알 수 있을 정도로 달기 주석을 하지 말고 s를 붙이고
     const addListBtn = document.getElementById('addBtnId')
     const addTitle = document.getElementById('addTitleId')
@@ -228,7 +245,7 @@ const allCheckVerify = new AllCheckVerify() // 전체 선택 버튼의 활성화
 const getData = new FindData() // localStorage와 countNumber를 얻고, 갱신하는 인스턴스
 const getNode = new GetNode() // node를 찾는 인스턴스
 const paint = new Paint() // 리스트를 갱신하는 인스턴스
-const checkEvnt = new LabelEvnt() // 체크 버튼을 누르는 이벤트
+// const checkEvnt = new LabelEvnt() // 체크 버튼을 누르는 이벤트
 const clearAll = new ClearAll() // 모든 리스트를 삭제
 const modalEvnt = new ModalEvnt() // 모달이 열리는 이벤트
 const writeEvnt = new WriteEvnt() // 모달에서 글쓰기 화면으로 전환 되는 이벤트
@@ -238,11 +255,10 @@ const changeEvnt = new ChangeEvnt() // 달력에서 날짜를 정하면 해당 �
 const inputClose = new InputClose() // 달력에서 날짜를 정하지 않고 윈도우를 클릭해서 달력을 종료했을 때, 다시 그전 날짜를 div에 띄어주는 이벤트
 const seeAllEvnt = new SeeAllEvnt() // 전체 리스트 보기 이벤트
 const seeDateEvnt = new SeeDateEvnt() // 달력에서 날짜를 정해서 리스를 보여주는 이벤트
-const changeGuageEvnt = new ChangeGuageEvnt() // 게이지가 변하면 달성률을 수정해주는 이벤트
 const drawChart = new DrawChart() // 달성률을 반영해서 차트를 그리는 이벤트
 const today = new Today() // 날짜를 얻는 생성자
 
-function start () { // 새로고침이나 페이지에 처음 들어갈 때 렌더링하는 함수
+const start = () => { // 새로고침이나 페이지에 처음 들어갈 때 렌더링하는 함수
     getData.start()
     beforCheck()
 }
@@ -261,12 +277,8 @@ function SeeDateEvnt () {
         let arr = getData.getData().loadingArr
         const date = $target.value
         arr = arr.filter(el => el.nodeDate === date)
-        getData.initDate() // 초기화
         getNode.getTotalList().textContent = ''
-        arr.forEach(element => {
-            paint.setState(element)
-            element.nodeId = getData.getData().countNumber - 1
-        })
+        paint.start(arr)
     }
 }
 
@@ -277,7 +289,9 @@ function SeeAllEvnt () {
     this.setState = (e) => { // 똑같이 그냥 renderArr 호출하면됨
         if (seeAllNode.checked === true) {
             selectDate.value = '' // 공백만
-            getData.renderArr()
+            getNode.getTotalList().textContent = ''
+            getData.start()
+            // getData.renderArr()
         } else if (selectDate.value === '') {
             selectDate.value = today.getToday()
             seeDateEvnt.setState()
@@ -338,11 +352,11 @@ getNode.getTotalList().addEventListener('click', totalEvnt) // 화살표 함수�
 
 function totalEvnt (event) {
     if (event.target.classList.contains('listInputLabel')) {
-        checkEvnt.setState(event.target)
+        checkEvnt(event.target)
     } else if (event.target.className === 'listRemoveDiv') {
         oneRemoveEvnt(event.target)
     } else if (event.target.className === 'listTitleDiv') {
-        modalEvnt.setState(event.target)
+        modalEvnt.setState(event.target, false)
     } else if (event.target.className === 'listDateDiv') {
         dateEvnt.setState(event.target)
     }
@@ -368,7 +382,7 @@ function ChangeEvnt () {
     }
 }
 
-function sortArr (arr) { // 날짜 정렬
+const sortArr = (arr) => { // 날짜 정렬
     for (const i in arr) {
         arr[i].nodeDate = Number(arr[i].nodeDate.substr(0, 4) + arr[i].nodeDate.substr(5, 2) + arr[i].nodeDate.substr(8, 2))
     }
@@ -381,7 +395,7 @@ function sortArr (arr) { // 날짜 정렬
     return arr
 }
 
-function sortArrForNodeId (arr) {
+const sortArrForNodeId = (arr) => {
     arr = arr.sort(function (previous, next) {
         return Number(previous.nodeId) - Number(next.nodeId)
     })
@@ -399,11 +413,10 @@ function InputClose () {
 }
 
 function ModalEvnt () {
-    this.setState = (e) => {
-        const id = e.id.substr(12)
+    this.setState = (e, command) => {
+        const id = e.className === 'listTitleDiv' ? e.id.substr(12) : e.id.substr(7)
         const modalNode = document.getElementById('modalId' + id)
-
-        if (modalNode === null) {
+        if (modalNode === null || command === true) {
             const modal = document.createElement('div')
             const modalContext = document.createElement('div')
             const modalGuage = document.createElement('input')
@@ -425,24 +438,30 @@ function ModalEvnt () {
             modal.appendChild(modalContext)
             modal.appendChild(insertWrite)
             modal.appendChild(modalGuage)
-            modalGuage.addEventListener('change', changeGuageEvnt.setState)
-            e.parentNode.insertAdjacentElement('afterend', modal)
+            modalGuage.addEventListener('change', changeGuageEvnt)
+            // e.className === 'listTitleDiv' ? e.parentNode.insertAdjacentElement('afterend', modal) : e.insertAdjacentElement('afterend', modal)
+            e.className === 'listTitleDiv' ? e.parentNode.insertAdjacentElement('beforeend', modal) : e.appendChild(modal)// e가 listTitle일 경우, e가 newList일 경우는 appenChild
             modal.addEventListener('click', writeEvnt.setState)
-        } else if (e.parentNode.nextSibling.className === 'modalDiv') {
+            e.className === 'listTitleDiv' ? e.parentNode.classList.add('modalOpen') : e.classList.add('modalOpen')
+        } else if (e.parentNode.lastChild.className === 'modalDiv') {
             modalNode.removeChild(modalNode.firstChild)
             modalNode.removeChild(modalNode.firstChild)
+            e.parentNode.classList.remove('modalOpen')
             modalNode.parentNode.removeChild(modalNode)
         }
     }
 }
-function ChangeGuageEvnt () {
-    this.setState = (e) => {
-        const { findArr, arr } = findArrIndex(e.target.id.substr(17))
-        findArr.nodeGauge = e.target.value
-        getData.setArr(arr)
-    }
+const changeGuageEvnt = (e) => {
+    const { findArr, arr } = findArrIndex(e.target.id.substr(17))
+    findArr.nodeGauge = e.target.value
+    getData.setArr(arr)
 }
-function findArrIndex (id) {
+// function changeGuageEvnt (e) {
+//     const { findArr, arr } = findArrIndex(e.target.id.substr(17))
+//     findArr.nodeGauge = e.target.value
+//     getData.setArr(arr)
+// }
+const findArrIndex = (id) => {
     const arr = getData.getData().loadingArr
     const findArr = arr.find(el => Number(el.nodeId) === Number(id))
     return { findArr, arr }
@@ -462,7 +481,7 @@ function WriteEvnt () {
 function ReadEvnt () {
     this.setState = (e) => {
         const checkParent = document.querySelectorAll('.insertWriteDivOpen')
-        if (checkParent.length === 1 && e.target.id !== checkParent[0].parentNode.id && e.target.id !== checkParent[0].previousSibling.id && e.target.className !== checkParent[0].parentNode.previousSibling.childNodes[1].id && e.target.className !== 'insertWriteDiv insertWriteDivOpen') {
+        if (checkParent.length === 1 && e.target.id !== checkParent[0].parentNode.id && e.target.id !== checkParent[0].previousSibling.id && e.target.className !== 'insertWriteDiv insertWriteDivOpen') {
             const { findArr: appenArr, arr } = findArrIndex(checkParent[0].parentNode.id.substr(7))
             appenArr.nodeContext = checkParent[0].value
             getData.setArr(arr)
@@ -475,50 +494,28 @@ function ReadEvnt () {
     }
 }
 
-function LabelEvnt () { // setState
-    this.state = null
-    this.setState = (e) => {
-        this.state = e
-        this.render(this.state)
-    }
-
-    this.render = (state) => {
-        const arr = getData.getData().loadingArr
-        const findNumber = state.id.substr(14)
-        const index = arr.findIndex(e => Number(e.nodeId) === Number(findNumber))
-        arr[index].nodeCheck = !(arr[index].nodeCheck)
-        changeCheckEvnt(state)
-        getData.setArr(arr)
-        beforCheck()
-    }
+const checkEvnt = (state) => { // setState
+    const arr = getData.getData().loadingArr
+    const findNumber = state.id.substr(14)
+    const index = arr.findIndex(e => Number(e.nodeId) === Number(findNumber))
+    arr[index].nodeCheck = !(arr[index].nodeCheck)
+    changeCheckEvnt(state)
+    getData.setArr(arr)
+    beforCheck()
 }
 
-function changeCheckEvnt (e) {
+const changeCheckEvnt = (e) => {
     e.nextSibling.classList.toggle('listTitleDivTrue')
     e.classList.toggle('listInputLabelTrue')
 }
 
-function oneRemoveEvnt (e) {
+const oneRemoveEvnt = (e) => {
     let newArr = getData.getData().loadingArr
-    // e.parentNode.remove()
     newArr = newArr.filter((el) => Number(el.nodeId) !== Number(e.id.substr(13)))
-    console.log(newArr)
     getData.renderArr(newArr)
     beforCheck()
 }
 
-function beforCheck () {
-    const arr = getData.getData().loadingArr
-    if (arr.length === 0) allCheckVerify.setState(false)
-    for (const i in arr) {
-        if (arr[i].nodeCheck === false) {
-            allCheckVerify.setState(false)
-            return
-        } else if (Number(i) === (arr.length - 1)) {
-            allCheckVerify.setState(true)
-        }
-    }
-}
 function ClearChecked () {
     this.$target = document.getElementById('checkedClearId')
 
@@ -535,9 +532,6 @@ function ClearChecked () {
 function ClearAll () {
     this.$target = document.getElementById('myListId')
     this.setState = () => {
-        while (this.$target.hasChildNodes()) {
-            this.$target.removeChild(this.$target.firstChild)
-        }
         getData.renderArr([])
     }
 }
