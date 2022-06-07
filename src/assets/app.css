@@ -68,7 +68,7 @@ body {
     line-height: 3;
     margin-left: 10%;
     float: left;
-    color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
     border-radius:5% 5% 5% 5%;
 }
 .todayChart{
@@ -99,6 +99,7 @@ body {
     text-align: center;
     font-size: 30px;
     cursor: pointer;
+    color: white;
     border-radius:0% 18% 18% 0%;
 }
 .addBtn:hover {
