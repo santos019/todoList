@@ -1,5 +1,5 @@
-import { deepCopy, sortArrForNodeId } from './lib'
-import { getGlobalStore } from './GlobalStore'
+import { deepCopy, sortArrForNodeId } from '../library/lib'
+import { getGlobalStore } from '../constructor/GlobalStore'
 import { changeCheckEvnt } from './checkModule'
 import { modalEvnt } from './modalModule'
 function Paint (initialState) {

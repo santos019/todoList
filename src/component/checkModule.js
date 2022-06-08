@@ -1,4 +1,4 @@
-import { getGlobalStore } from './GlobalStore'
+import { getGlobalStore } from '../constructor/GlobalStore'
 
 export const changeCheckEvnt = (e) => {
     e.nextSibling.classList.toggle('listTitleDivTrue')
@@ -38,8 +38,8 @@ export const allClickEvnt = (e) => {
     const getGlobalIns = getGlobalStore.getInstance()
     const arr = getGlobalIns.getData().loadingArr
     const allNodes = document.querySelectorAll('.listInputLabel')
-    arr.forEach(element => { element.nodeCheck = this.state })
-    if (this.state) {
+    arr.forEach(element => { element.nodeCheck = e.srcElement.checked })
+    if (e.srcElement.checked) {
         allNodes.forEach(element => {
             element.nextSibling.classList.add('listTitleDivTrue')
             element.classList.add('listInputLabelTrue')

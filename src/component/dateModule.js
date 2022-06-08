@@ -1,7 +1,7 @@
-import { findArrIndex, getToday } from './lib'
-import { getGlobalStore } from './GlobalStore'
+import { findArrIndex, getToday } from '../library/lib'
+import { getGlobalStore } from '../constructor/GlobalStore'
 import { getPaint } from './Paint'
-import { getNode } from './NodeStore'
+import { getNode } from '../constructor/NodeStore'
 
 export const dateEvnt = (e) => {
     const dataSelect = document.createElement('input')
@@ -46,7 +46,7 @@ export const seeAllEvnt = () => {
     const selectDate = getNodeIns.getSelectDate()
     if (seeAllNode.checked === true) {
         selectDate.value = '' // 공백만
-        getNodeIns().getTotalList().textContent = ''
+        getNodeIns.getTotalList().textContent = ''
         getGlobalIns.start()
     } else if (selectDate.value === '') {
         selectDate.value = getTodayIns()

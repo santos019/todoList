@@ -1,5 +1,5 @@
-import { getGlobalStore } from './GlobalStore'
-import { findArrIndex } from './lib'
+import { getGlobalStore } from '../constructor/GlobalStore'
+import { findArrIndex } from '../library/lib'
 export const modalEvnt = (e) => {
     const id = e.classList.contains('listTitleDiv') ? e.id.substr(12) : e.id.substr(7)
     const modalNode = document.getElementById('modalId' + id)
