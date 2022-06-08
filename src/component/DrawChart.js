@@ -3,21 +3,24 @@ import { getToday } from '../library/lib'
 // 클래스로 바꾸기
 // 폴더분리 - 생성자 따로, 공용 라이브러리, 나머지
 // 리드미
-function DrawChart () {
-    const canvas = document.getElementById('todayChartId')
-    const ctx = canvas.getContext('2d')
-    ctx.strokeRect(5, 20, 251, 100)
-    this.setState = () => {
+class DrawChart {
+    constructor () {
+        this.canvas = document.getElementById('todayChartId')
+        this.ctx = this.canvas.getContext('2d')
+        this.ctx.strokeRect(5, 20, 251, 100)
+    }
+
+    setState () {
         const getGlobalIns = getGlobalStore.getInstance()
         const endGuage = calculateGauge(getGlobalIns.getData().loadingArr)
-        ctx.clearRect(5, 45, 250, 50)
+        this.ctx.clearRect(5, 45, 250, 50)
         let cost = 0
-        ctx.fillStyle = 'rgb(8, 33, 116)'
-        ctx.strokeStyle = 'rgba(255, 255, 0, 0.5)'
-        const draw = setInterval(function () {
+        this.ctx.fillStyle = 'rgb(8, 33, 116)'
+        this.ctx.strokeStyle = 'rgba(255, 255, 0, 0.5)'
+        const draw = setInterval(() => {
             cost += 1
             if (cost >= endGuage) clearInterval(draw)
-            ctx.fillRect(5, 45, cost, 50)
+            this.ctx.fillRect(5, 45, cost, 50)
         })
     }
 }
