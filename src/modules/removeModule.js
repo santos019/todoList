@@ -21,8 +21,6 @@ export const oneRemoveEvnt = (e) => {
 }
 const detailCheck = (e) => {
     if (e.nodeCheck) {
-        // const removeLi = document.getElementById('newList' + e.nodeId)
-        // getNode.getTotalList().removeChild(removeLi)
         return false
     } else return true
 }

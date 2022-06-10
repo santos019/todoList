@@ -1,4 +1,4 @@
-class GetNode { // 제목을 보고 알 수 있을 정도로 달기 주석을 하지 말고 s를 붙이고
+class GetNode { 
     constructor () {
         this.addListBtn = document.getElementById('addBtnId')
         this.addTitle = document.getElementById('addTitleId')

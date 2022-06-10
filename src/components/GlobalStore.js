@@ -4,10 +4,10 @@ import { getPaint } from './Paint'
 function GlobalStore () {
     let output = localStorage.getItem('list')
     let loadingArr = JSON.parse(output) || []
-    let countNumber = 0 // 이벤트를 할 때 마다 갱신하기
+    let countNumber = 0 
     const getDrawChartIns = getDrawChart.getInstance()
     const getPaintIns = getPaint.getInstance()
-    this.getData = () => { // countNumber를 이렇게 한 이유 : 새롭게 리스트를 추가했을 때 nodeId가 겹칠 수 있기 때문에 겹칠 일 없이 nodeId 최대
+    this.getData = () => { 
         return { output, loadingArr, countNumber }
     }
     this.setData = ({ nodeId, nodeTitle, nodeContext, nodeCheck, nodeDate }) => {
@@ -38,7 +38,6 @@ function GlobalStore () {
             }
         })
         countNumber = Number(maxIndex + 1)
-        // console.log(getPaintIns.start(loadingArr))
         getPaintIns.start(loadingArr)
     }
 
@@ -47,7 +46,6 @@ function GlobalStore () {
     }
 }
 
-// const globalStore = new GlobalStore() // globalStore
 const getGlobalStore = (function () {
     let instance
     const initInstance = new GlobalStore()

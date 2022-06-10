@@ -236,12 +236,24 @@ input[type=checkbox]:checked + label{
 
 }
 .footerContainer{
-    width: 100%;
+    width: 100vw;
     height: 19vh;
     position: relative;
     bottom: 0;
     margin-top: 10%;
-    background-color: rgb(0, 0, 0);
+    background-color: rgb(41, 66, 147);
+    padding: 20px;
+
+}
+.copyRightData{
+    color: rgb(189, 195, 198);
+    font-size: 14px;
+    text-align: center;
+}
+.gitIcon{
+    width: 30px;
+    background-color: #d0cece;
+   
 }
 .newList{
 

@@ -23,7 +23,7 @@ export const allCheckVerify = (e) => {
     $target.checked = e
     $labelTarget.textContent = (e === true ? '전체 해제' : '전체 선택')
 }
-export const checkEvnt = (state) => { // setState
+export const checkEvnt = (state) => { 
     const getGlobalIns = getGlobalStore.getInstance()
     const arr = getGlobalIns.getData().loadingArr
     const findNumber = state.id.substr(14)

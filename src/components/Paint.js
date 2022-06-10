@@ -6,24 +6,23 @@ function Paint (initialState) {
     this.state = initialState
     this.$target = document.getElementById('myListId')
     this.afterArr = []
-    // this.beforeArrLen = this.beforeArr.length
     this.afterArrLen = 0
     this.count = 0
     this.setState = (nextState) => {
         this.afterArr = deepCopy(nextState)
         this.beforeArrLen = this.beforeArr.length
         this.afterArrLen = this.afterArr.length
-        if ((this.afterArrLen > this.beforeArrLen) || (this.afterArrLen > 0 && this.beforeArrLen === 0)) { // 증가
+        if ((this.afterArrLen > this.beforeArrLen) || (this.afterArrLen > 0 && this.beforeArrLen === 0)) { 
             this.addNode()
         } else if (this.afterArr.length === 0) {
             while (this.$target.hasChildNodes()) {
                 this.$target.removeChild(this.$target.firstChild)
             }
-        } else if (this.afterArrLen < this.beforeArrLen) { // 감소
+        } else if (this.afterArrLen < this.beforeArrLen) { 
             this.afterArr = sortArrForNodeId(this.afterArr)
             this.beforeArr = sortArrForNodeId(this.beforeArr)
             this.minusNode()
-        } else { // 동일 상세 데이터 조회 후, 해당 노드만 다시 렌더링
+        } else { 
             this.detailNode()
         }
 
@@ -50,7 +49,7 @@ function Paint (initialState) {
             $addTarget.insertAdjacentElement('beforebegin', this.render(this.afterArr[i]))
         }
     }
-    this.minusNode = () => { // 노드 데이터 순서대로 정렬하고 지우기
+    this.minusNode = () => { 
         if (this.count > this.afterArrLen - 1) {
             for (let i = Number(this.count); i <= this.beforeArr.length - 1; i++) {
                 const $minusTarget = document.getElementById('newList' + this.beforeArr[i].nodeId)
@@ -78,7 +77,7 @@ function Paint (initialState) {
         const index = this.afterArr.findIndex((node, i) => JSON.stringify(node) !== JSON.stringify(objBeforArr[this.afterArr[i].nodeId]))
         const changedNodeId = this.afterArr[index].nodeId
         const $changeTarget = document.getElementById('newList' + changedNodeId)
-        if ($changeTarget.classList.contains('modalOpen')) { // 모달이 열려있으면
+        if ($changeTarget.classList.contains('modalOpen')) { 
             modalOpenValue = true
         }
         const changedNode = this.render(this.afterArr[index])
@@ -94,7 +93,6 @@ function Paint (initialState) {
     }
 
     this.render = (state) => {
-        // state 값은 제목과 날짜 체크여부 => 배열 인자 하나씩 넣어주기
         const inserDate = document.createTextNode(state.nodeDate)
         const insertTitle = document.createTextNode(state.nodeTitle)
         const newList = document.createElement('li')
@@ -108,7 +106,7 @@ function Paint (initialState) {
         listInput.className = 'listInput'
         listInput.id = 'listInput' + state.nodeId
         listInput.type = 'checkbox'
-        listInput.checked = state.check // 수정
+        listInput.checked = state.check 
         listInputLabel.className = 'listInputLabel'
         listInputLabel.id = 'listInputLabel' + state.nodeId
         listTitleDiv.className = 'listTitleDiv'
@@ -131,7 +129,6 @@ function Paint (initialState) {
     }
 }
 
-// const paint = new Paint()
 
 export const getPaint = (function () {
     let instance

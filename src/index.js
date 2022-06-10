@@ -15,7 +15,7 @@ import {
 } from './modules'
 import { getNode } from './components/NodeStore'
 const getNodeIns = getNode.getInstance()
-function start () { // 새로고침이나 페이지에 처음 들어갈 때 렌더링하는 함수
+function start () {
     const getGlobalIns = getGlobalStore.getInstance()
     getGlobalIns.start()
     beforCheck()
@@ -40,4 +40,4 @@ const totalEvnt = (event) => {
         dateEvnt(event.target)
     }
 }
-getNodeIns.getTotalList().addEventListener('click', totalEvnt) // 화살표 함수로 바꾸세요~~~ 바인드 설명듣기~~~~
+getNodeIns.getTotalList().addEventListener('click', totalEvnt)
