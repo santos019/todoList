@@ -1,4 +1,4 @@
-import { getGlobalStore } from '../constructor/GlobalStore'
+import { getGlobalStore } from '../components/GlobalStore'
 import { beforCheck } from './checkModule'
 
 export const clearChecked = () => {

@@ -1,7 +1,7 @@
-import { findArrIndex, getToday } from '../library/lib'
-import { getGlobalStore } from '../constructor/GlobalStore'
-import { getPaint } from './Paint'
-import { getNode } from '../constructor/NodeStore'
+import { findArrIndex, getToday } from '../lib'
+import { getGlobalStore } from '../components/GlobalStore'
+import { getPaint } from '../components/Paint'
+import { getNode } from '../components/NodeStore'
 
 export const dateEvnt = (e) => {
     const dataSelect = document.createElement('input')

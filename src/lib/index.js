@@ -1,4 +1,4 @@
-import { getGlobalStore } from '../constructor/GlobalStore'
+import { getGlobalStore } from '../components/GlobalStore'
 
 export const deepCopy = (object) => {
     if (object === null || typeof object !== 'object') {

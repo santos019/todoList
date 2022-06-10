@@ -1,7 +1,7 @@
-import { getGlobalStore } from '../constructor/GlobalStore'
-import { getNode } from '../constructor//NodeStore'
+import { getGlobalStore } from '../components/GlobalStore'
+import { getNode } from '../components/NodeStore'
 import { allCheckVerify } from './checkModule'
-import { getToday } from '../library/lib'
+import { getToday } from '../lib'
 export const clickAddBtn = () => { // state = {title, date(today), check(false)}
     const getNodeIns = getNode.getInstance()
     const getGlobalIns = getGlobalStore.getInstance()

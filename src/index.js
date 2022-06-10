@@ -1,11 +1,19 @@
 import './assets/app.css'
-import { getGlobalStore } from './constructor/GlobalStore'
-import { beforCheck, checkEvnt, allClickEvnt } from './component/checkModule'
-import { getNode } from './constructor/NodeStore'
-import { clearChecked, clearAll, oneRemoveEvnt } from './component/removeModule'
-import { dateEvnt, seeDateEvnt, seeAllEvnt } from './component/dateModule'
-import { clickAddBtn } from './component/addList'
-import { modalEvnt } from './component/modalModule'
+import { getGlobalStore } from './components/GlobalStore'
+import {
+    beforCheck,
+    checkEvnt,
+    allClickEvnt,
+    clearChecked,
+    clearAll,
+    oneRemoveEvnt,
+    dateEvnt,
+    seeDateEvnt,
+    seeAllEvnt,
+    clickAddBtn,
+    modalEvnt
+} from './modules'
+import { getNode } from './components/NodeStore'
 const getNodeIns = getNode.getInstance()
 function start () { // 새로고침이나 페이지에 처음 들어갈 때 렌더링하는 함수
     const getGlobalIns = getGlobalStore.getInstance()

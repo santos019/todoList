@@ -1,8 +1,6 @@
-import { getGlobalStore } from '../constructor/GlobalStore'
-import { getToday } from '../library/lib'
-// 클래스로 바꾸기
-// 폴더분리 - 생성자 따로, 공용 라이브러리, 나머지
-// 리드미
+import { getGlobalStore } from './GlobalStore'
+import { getToday } from '../lib'
+
 class DrawChart {
     constructor () {
         this.canvas = document.getElementById('todayChartId')

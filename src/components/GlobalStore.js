@@ -1,6 +1,6 @@
-import { sortArr } from '../library/lib'
-import { getDrawChart } from '../component/DrawChart'
-import { getPaint } from '../component/Paint'
+import { sortArr } from '../lib'
+import { getDrawChart } from './DrawChart'
+import { getPaint } from './Paint'
 function GlobalStore () {
     let output = localStorage.getItem('list')
     let loadingArr = JSON.parse(output) || []

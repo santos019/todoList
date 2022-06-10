@@ -1,4 +1,4 @@
-import { getGlobalStore } from '../constructor/GlobalStore'
+import { getGlobalStore } from '../components/GlobalStore'
 
 export const changeCheckEvnt = (e) => {
     e.nextSibling.classList.toggle('listTitleDivTrue')

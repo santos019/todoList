@@ -1,7 +1,7 @@
-import { deepCopy, sortArrForNodeId } from '../library/lib'
-import { getGlobalStore } from '../constructor/GlobalStore'
-import { changeCheckEvnt } from './checkModule'
-import { modalEvnt } from './modalModule'
+import { deepCopy, sortArrForNodeId } from '../lib'
+import { getGlobalStore } from './GlobalStore'
+import { changeCheckEvnt } from '../modules/checkModule'
+import { modalEvnt } from '../modules/modalModule'
 function Paint (initialState) {
     this.state = initialState
     this.$target = document.getElementById('myListId')
