@@ -1,6 +1,7 @@
 import { sortArr } from '../lib'
 import { getDrawChart } from './DrawChart'
 import { getPaint } from './Paint'
+import { HeaderPaintAdd } from './HeaderPaint'
 function GlobalStore () {
     let output = localStorage.getItem('list')
     let loadingArr = JSON.parse(output) || []
@@ -36,6 +37,7 @@ function GlobalStore () {
             if (el.nodeId > maxIndex) {
                 maxIndex = el.nodeId
             }
+            HeaderPaintAdd(el)
         })
         countNumber = Number(maxIndex + 1)
         getPaintIns.start(loadingArr)

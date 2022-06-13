@@ -35,7 +35,6 @@ function Paint (initialState) {
         this.beforeArr = deepCopy(getGlobalIns.getData().loadingArr)
         nextState.forEach(el => {
             this.$target.appendChild(this.render(el))
-            HeaderPaintAdd(el)
         })
     }
     this.addNode = () => {

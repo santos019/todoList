@@ -28,7 +28,7 @@ getNodeIns.getClearAllBtn().addEventListener('click', clearAll)
 getNodeIns.getSeeAllBtn().addEventListener('click', seeAllEvnt)
 getNodeIns.getSelectDate().addEventListener('change', seeDateEvnt)
 getNodeIns.getAddListBtn().addEventListener('click', clickAddBtn)
-
+window.addEventListener('keyup', clickAddBtn)
 const totalEvnt = (event) => {
     if (event.target.classList.contains('listInputLabel')) {
         checkEvnt(event.target)
