@@ -252,7 +252,6 @@ input[type=checkbox]:checked + label{
 }
 .gitIcon{
     width: 30px;
-    background-color: #d0cece;
    
 }
 .newList{
@@ -560,4 +559,9 @@ input[type="range"]::-webkit-slider-runnable-track {
     height: 150px;
     border-bottom: 0px solid rgb(192, 192, 192);
     margin-bottom: 10px;
+}
+.linkTogit{
+    width: 30px;
+    cursor: pointer;
+    display: table; margin-left: auto; margin-right: auto;
 }
