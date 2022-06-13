@@ -75,12 +75,12 @@ body {
     background: rgb(8, 33, 116);
     /* background: linear-gradient( to bottom, rgb(28, 62, 131), rgba(5, 19, 82, 0.705)); */
     font-size: 30px;
-    font-weight: 300;
+    font-weight: 100;
     text-align: center;
     line-height: 3;
     margin-left: 10%;
     float: left;
-    color: rgb(255, 255, 255);
+    color: rgb(207, 207, 207);
     border-radius:5% 5% 5% 5%;
     position: relative;
     z-index: 2;
