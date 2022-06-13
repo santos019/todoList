@@ -5,7 +5,6 @@ class DrawChart {
     constructor () {
         this.canvas = document.getElementById('todayChartId')
         this.ctx = this.canvas.getContext('2d')
-        this.ctx.strokeRect(5, 20, 251, 100)
     }
 
     setState () {

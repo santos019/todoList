@@ -4,10 +4,10 @@ import { getPaint } from './Paint'
 function GlobalStore () {
     let output = localStorage.getItem('list')
     let loadingArr = JSON.parse(output) || []
-    let countNumber = 0 
+    let countNumber = 0
     const getDrawChartIns = getDrawChart.getInstance()
     const getPaintIns = getPaint.getInstance()
-    this.getData = () => { 
+    this.getData = () => {
         return { output, loadingArr, countNumber }
     }
     this.setData = ({ nodeId, nodeTitle, nodeContext, nodeCheck, nodeDate }) => {
