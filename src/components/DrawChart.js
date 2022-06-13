@@ -15,9 +15,9 @@ class DrawChart {
         this.ctx.fillStyle = 'rgb(8, 33, 116)'
         this.ctx.strokeStyle = 'rgba(255, 255, 0, 0.5)'
         const draw = setInterval(() => {
-            cost += 1
             if (cost >= endGuage) clearInterval(draw)
             this.ctx.fillRect(5, 45, cost, 50)
+            cost += 1
         })
     }
 }

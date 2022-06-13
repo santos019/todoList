@@ -40,14 +40,17 @@ export const seeDateEvnt = () => {
 }
 export const seeAllEvnt = () => {
     const getNodeIns = getNode.getInstance()
+    const getPaintIns = getPaint.getInstance()
     const getGlobalIns = getGlobalStore.getInstance()
     const getTodayIns = getToday()
+    const arr = getGlobalIns.getData().loadingArr
     const seeAllNode = getNodeIns.getSeeAllBtn()
     const selectDate = getNodeIns.getSelectDate()
     if (seeAllNode.checked === true) {
+        console.log('test')
         selectDate.value = ''
         getNodeIns.getTotalList().textContent = ''
-        getGlobalIns.start()
+        getPaintIns.start(arr)
     } else if (selectDate.value === '') {
         selectDate.value = getTodayIns()
         seeDateEvnt()
