@@ -1,5 +1,12 @@
+@font-face {
+    font-family: 'SANGJUGyeongcheonIsland';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2112@1.0/SANGJUGyeongcheonIsland.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
 html {
     box-sizing: border-box;
+    font-family: 'SANGJUGyeongcheonIsland';
 }
 body {
     margin: 0;
@@ -15,12 +22,16 @@ body {
 
 }
 .headCanvas{
-
-    animation: move 5s linear infinite;
-    background-image: url("./Img/backImg.png") ;
+    position: relative;
+    /* animation: move 5s linear infinite;
+    background-image: url("./Img/backImg.png") ; */
     background-color: aliceblue;
     width: 100%;
     height: 100%;
+}
+.insertDiv{
+    position: relative;
+    z-index: 1;
 }
 @keyframes move {
     from{
@@ -37,11 +48,12 @@ body {
     text-align: center;
     position: absolute;
     margin-left: 40%;
-    margin-top: -7%;
+    margin-top: -3%;
     line-height: 40px;
     font-size: 70px;
     font-weight: 900;
     text-shadow: 6px 2px 2px gray;
+    z-index: 2;
 }
 .bodyContainer{
     width: 100%;
@@ -61,15 +73,17 @@ body {
     width: 20%;
     height: 100%;
     background: rgb(8, 33, 116);
-    background: linear-gradient( to bottom, rgb(28, 62, 131), rgba(5, 19, 82, 0.705));
+    /* background: linear-gradient( to bottom, rgb(28, 62, 131), rgba(5, 19, 82, 0.705)); */
     font-size: 30px;
-    font-weight: 600;
+    font-weight: 300;
     text-align: center;
     line-height: 3;
     margin-left: 10%;
     float: left;
     color: rgb(255, 255, 255);
     border-radius:5% 5% 5% 5%;
+    position: relative;
+    z-index: 2;
 }
 .todayChart{
     width: 500px;
@@ -78,11 +92,16 @@ body {
     background-color: rgb(255, 255, 255);
     border: 1px solid gray;
     float: left;
+    position: relative;
+    z-index: 2;
 }
 .addListContainer{
     width: 70%;
     height: 50px;
     box-shadow: 5px 5px 5px 5px gray;
+    position: relative;
+    z-index: 2;
+    background-color: white;
 }
 .addTitle{
     width: 70%;
@@ -95,12 +114,14 @@ body {
     height: 100%;
     float: left;
     background: rgb(8, 33, 116);
-    background: linear-gradient( to bottom, rgb(28, 62, 131), rgba(5, 19, 82, 0.705));
+    /* background: linear-gradient( to bottom, rgb(28, 62, 131), rgba(5, 19, 82, 0.705)); */
     text-align: center;
     font-size: 30px;
     cursor: pointer;
     color: white;
     border-radius:0% 18% 18% 0%;
+    line-height: 1.7;
+
 }
 .addBtn:hover {
     background: rgb(136, 156, 221);
@@ -115,6 +136,9 @@ body {
     align-items: center;
     margin-top: 1%;
     box-shadow: 5px 5px 5px 5px gray;
+    position: relative;
+    z-index: 2;
+    background-color: white;
 }
 .ListOption{
     width: 93%;
@@ -206,6 +230,7 @@ input[type=checkbox]:checked + label{
     color: rgb(0, 0, 0);
     font-weight: 700;
     flex:auto;
+    line-height: 2.7;
 }
 .checkedClear:hover {
     background: rgb(8, 33, 116);
@@ -223,6 +248,7 @@ input[type=checkbox]:checked + label{
     color: rgb(0, 0, 0);
     font-weight: 700;
     flex:auto;
+    line-height: 2.7;
   
 }
 .AllClear:hover{

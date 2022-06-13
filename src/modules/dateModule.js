@@ -45,7 +45,7 @@ export const seeAllEvnt = () => {
     const seeAllNode = getNodeIns.getSeeAllBtn()
     const selectDate = getNodeIns.getSelectDate()
     if (seeAllNode.checked === true) {
-        selectDate.value = '' 
+        selectDate.value = ''
         getNodeIns.getTotalList().textContent = ''
         getGlobalIns.start()
     } else if (selectDate.value === '') {
