@@ -1,4 +1,4 @@
-class GetNode {
+class NodeStore {
     constructor () {
         this.addListBtn = document.getElementById('addBtnId')
         this.addTitle = document.getElementById('addTitleId')
@@ -50,7 +50,7 @@ class GetNode {
 
 export const getNode = (function () {
     let instance
-    const initInstance = new GetNode()
+    const initInstance = new NodeStore()
     function init () {
         return initInstance
     }

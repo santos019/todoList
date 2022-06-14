@@ -14,7 +14,7 @@ export const sortArr = (arr) => {
     for (const i in arr) {
         arr[i].nodeDate = Number(arr[i].nodeDate.substr(0, 4) + arr[i].nodeDate.substr(5, 2) + arr[i].nodeDate.substr(8, 2))
     }
-    arr = arr.sort(function (previous, next) {
+    arr.sort(function (previous, next) {
         return previous.nodeDate - next.nodeDate
     })
     for (const i in arr) {
